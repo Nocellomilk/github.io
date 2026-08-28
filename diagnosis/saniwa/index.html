@@ -111,6 +111,13 @@ button:hover{filter:brightness(1.06)}
 }
 .footer{text-align:center;color:#776e62;font-size:11px;letter-spacing:.1em;margin-top:18px}
 
+.site-top{
+  display:inline-block;margin:0 0 14px 2px;padding:9px 14px;
+  border:1px solid #7e1e1e7a;background:#faf7eef2;color:#5b2020;
+  text-decoration:none;font-weight:bold;font-size:13px;
+}
+.site-top:hover{background:#f4ecdf}
+
 
 .time-block{margin:24px auto 0;max-width:760px;padding-top:20px;border-top:1px solid #d2c8b5}
 .time-label{font-size:15px;color:#4d4034;font-weight:bold;margin-bottom:12px}
@@ -174,10 +181,44 @@ button:hover{filter:brightness(1.06)}
   color:#fff;font:inherit;font-size:12px;cursor:pointer
 }
 
+
+.compatibility-section{margin-top:18px;padding:18px 20px;border:1px solid #d2c8b5;background:#fffdf8}
+.compatibility-title{margin:0 0 12px;color:#772b2b;font-size:15px;letter-spacing:.08em}
+.compatibility-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.compatibility-card{border:1px solid #cfc3ae;background:#f8f3e9;padding:15px 16px}
+.compatibility-label{font-size:11px;letter-spacing:.12em;color:#7d6e59;margin-bottom:6px}
+.compatibility-main{font-size:20px;font-weight:bold;letter-spacing:.08em;color:#3c3026}
+.compatibility-sub{margin-top:7px;font-size:12px;line-height:1.8;color:#665d52}
+.compatibility-special{margin-top:8px;padding:8px 10px;border-left:4px solid #8b4a3e;background:#f5e9e1;color:#6a302a;font-size:12px;font-weight:bold}
+.compatibility-note{margin-top:11px;font-size:11px;line-height:1.7;color:#776e62}
+@media(max-width:720px){.compatibility-grid{grid-template-columns:1fr}}
+
+
+.environment-card{grid-column:1 / -1}
+.environment-season{
+  font-size:22px;font-weight:bold;letter-spacing:.12em;color:#3c3026;margin-bottom:10px
+}
+.scenery-list{
+  display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px
+}
+.scenery-item{
+  border:1px solid #d2c8b5;background:#fffdf8;padding:13px 14px
+}
+.scenery-name{
+  font-size:14px;font-weight:bold;line-height:1.7;color:#5b2020;letter-spacing:.04em
+}
+.scenery-comment{
+  margin-top:5px;font-size:12px;line-height:1.8;color:#665d52
+}
+@media(max-width:720px){
+  .scenery-list{grid-template-columns:1fr}
+}
+
 </style>
 </head>
 <body>
 <div class="wrap">
+  <a class="site-top" href="../../">← みるくの診断・ツール置き場へ</a>
   <header class="header">
     <div class="seal">時の政府</div>
     <div class="kicker">UNOFFICIAL FAN-MADE ASSESSMENT</div>
@@ -201,9 +242,9 @@ button:hover{filter:brightness(1.06)}
         <label class="time-option"><input type="radio" name="birthTime" value="day"><span>昼<small>日中</small></span></label>
         <label class="time-option"><input type="radio" name="birthTime" value="dusk"><span>夕暮れ<small>日没頃</small></span></label>
         <label class="time-option"><input type="radio" name="birthTime" value="evening"><span>宵<small>日没後～深夜</small></span></label>
-        <label class="time-option"><input type="radio" name="birthTime" value="unknown" checked><span>不明<small>補正なし</small></span></label>
+        <label class="time-option"><input type="radio" name="birthTime" value="unknown" checked><span>不明<small>時間情報なし</small></span></label>
       </div>
-      <div class="note">※出生時刻が分からない場合は「不明」を選択してください。出生時間帯は能力値補正の算定にのみ参照され、霊力の質・感応特性・結縁特性・本丸運用の各分類には影響しません。</div>
+      <div class="note">※出生時刻が分からない場合は「不明」を選択してください。出生時間帯は能力値の算定にのみ参照され、霊力の質・感応特性・結縁特性・本丸運用の各分類には影響しません。</div>
     </div>
 
     <button onclick="diagnose()">適性を鑑定する</button>
@@ -222,6 +263,40 @@ button:hover{filter:brightness(1.06)}
       <div id="timeResult" class="time-result"></div>
       <div class="grid" id="stats"></div>
       <div class="traits" id="traits"></div>
+
+<div class="compatibility-section" id="compatibilitySection">
+  <h3 class="compatibility-title">適合傾向</h3>
+  <div class="compatibility-grid">
+    <div class="compatibility-card">
+      <div class="compatibility-label">刀種適合傾向</div>
+      <div class="compatibility-main" id="compatibleSwordType">―</div>
+      <div class="compatibility-sub">本丸の運用特性から、特に適合性が高い刀種として観測されました。</div>
+    </div>
+    <div class="compatibility-card">
+      <div class="compatibility-label">刀派適合傾向</div>
+      <div class="compatibility-main" id="compatibleSchool">―</div>
+      <div class="compatibility-special" id="compatibleSchoolSpecial" style="display:none"></div>
+      <div class="compatibility-sub" id="compatibleSchoolText">複数の観測項目から、刀派との適合傾向を判定します。</div>
+    </div>
+    <div class="compatibility-card environment-card">
+      <div class="compatibility-label">本丸環境適合傾向</div>
+      <div class="environment-season" id="compatibleSeason">―</div>
+      <div class="compatibility-sub">霊力特性から、本丸環境と調和しやすい季節傾向・推奨される景趣を判定します。</div>
+      <div class="scenery-list">
+        <div class="scenery-item">
+          <div class="scenery-name" id="sceneryName1">―</div>
+          <div class="scenery-comment" id="sceneryComment1">―</div>
+        </div>
+        <div class="scenery-item">
+          <div class="scenery-name" id="sceneryName2">―</div>
+          <div class="scenery-comment" id="sceneryComment2">―</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="compatibility-note">※適合傾向は本丸運用・霊力・結縁上の傾向を示す参考情報です。個々の刀剣男士との関係性を限定するものではありません。</div>
+</div>
+
       <div id="comment" class="comment"></div>
       <div id="special" class="special" style="display:none"></div>
     </div>
@@ -232,7 +307,8 @@ button:hover{filter:brightness(1.06)}
       <button class="save-btn" onclick="saveResultImage()">鑑定結果を画像として保存</button>
       <button class="share-btn" onclick="shareToX()">Xで結果をシェア</button>
     </div>
-    <div class="note">※Xへの画像添付は、保存した画像を投稿画面から追加してください。</div>
+    <div class="note">※鑑定結果画像はPC環境での保存を推奨しています。スマートフォンでは画面幅の関係で、画像が縦長になります。<br>
+    ※Xへの画像添付は、保存した画像を投稿画面から追加してください。</div>
   </div>
 
   <div class="disclaimer">※この診断は非公式のファンメイドコンテンツです。『刀剣乱舞ONLINE』および公式のゲーム設定・運営・関係各社とは一切関係ありません。</div>
@@ -256,18 +332,18 @@ button:hover{filter:brightness(1.06)}
 const nums=[1,2,3,4,5,6,7,8,9,11,22,33];
 
 const quality={
-1:["鋭質","霊力の精密操作・瞬間的な作用に優れる"],
-2:["柔質","対象に合わせた柔軟な霊力調整に優れる"],
-3:["明質","霊力の伝達・可視化・顕在化に優れる"],
-4:["強質","高出力の霊力運用に優れる"],
-5:["静質","霊力の静穏化・安定化に特に優れる"],
-6:["温質","霊的存在の鎮静・馴染みを特に得意とする"],
-7:["深質","深層への霊力干渉・接続に優れる"],
-8:["流質","霊力の循環・再配分に優れる"],
-9:["澄質","霊力の純度・安定性に優れる"],
-11:["霊質","神霊・付喪神との親和性が特に高い"],
-22:["濃質","高密度・凝縮された霊力運用に優れる"],
-33:["淡質","低干渉・低存在感の霊力運用に優れる"]
+1:["「鋭」の性質","霊力の精密操作・瞬間的な作用に優れる"],
+2:["「柔」の性質","対象に合わせた柔軟な霊力調整に優れる"],
+3:["「明」の性質","霊力の伝達・可視化・顕在化に優れる"],
+4:["「強」の性質","高出力の霊力運用に優れる"],
+5:["「静」の性質","霊力の静穏化・安定化に特に優れる"],
+6:["「温」の性質","霊的存在の鎮静・馴染みを特に得意とする"],
+7:["「深」の性質","深層への霊力干渉・接続に優れる"],
+8:["「流」の性質","霊力の循環・再配分に優れる"],
+9:["「澄」の性質","霊力の純度・安定性に優れる"],
+11:["「霊」の性質","神霊・付喪神との親和性が特に高い"],
+22:["「濃」の性質","高密度・凝縮された霊力運用に優れる"],
+33:["「淡」の性質","低干渉・低存在感の霊力運用に優れる"]
 };
 const sensitivity={
 1:["予兆感応","発生前の異常・危険兆候の察知に優れる"],
@@ -313,6 +389,145 @@ const bondBase={1:65,2:75,3:80,4:70,5:60,6:90,7:85,8:80,9:95,11:90,22:85,33:100}
 const qSens={1:0,2:5,3:0,4:0,5:0,6:5,7:10,8:0,9:5,11:10,22:0,33:0};
 const qBond={1:-5,2:10,3:0,4:0,5:0,6:10,7:5,8:-5,9:5,11:0,22:0,33:15};
 const masterBonus={1:0,2:0,3:0,4:0,5:0,6:0,7:0,8:0,9:0,11:5,22:8,33:10};
+
+
+const swordTypeByOperation={
+  7:"脇差",5:"短刀",6:"打刀・剣",4:"打刀",
+  1:"太刀・槍",8:"太刀・大太刀",3:"太刀",2:"打刀・槍",
+  9:"打刀・大太刀",11:"太刀・薙刀",22:"太刀・剣",33:"打刀・薙刀"
+};
+
+const schoolByReiryoku={
+  9:"三条",1:"長船",3:"福岡一文字",2:"来",4:"三池",7:"青江",
+  5:"左文字",8:"波平",6:"粟田口",11:"鵜飼",22:"古備前",33:"堀川"
+};
+
+const schoolByBonding={
+  1:"福岡一文字",2:"青江",3:"来",4:"粟田口",5:"三池",6:"堀川",
+  7:"古備前",8:"長船",9:"三条",11:"左文字",22:"鵜飼",33:"波平"
+};
+
+
+const environmentByReiryoku={
+  9:{
+    season:"春・冬",
+    scenery:[
+      ["二十四節気　清明・雛芥子","清明の澄んだ気配が霊力の濁りを抑え、透明度の高い状態を保ちやすくします。"],
+      ["二十四節気　小寒・水仙","冬の澄んだ空気と白く広がる水仙が余分な揺らぎを鎮め、「澄」の性質が持つ清冽さを引き出します。"]
+    ]
+  },
+  1:{
+    season:"夏・冬",
+    scenery:[
+      ["二十四節気　夏至・立葵","夏の強い陽射しとまっすぐ伸びる立葵の気配が霊力の指向性を高め、瞬間的かつ明確な作用へ集中させやすくします。"],
+      ["二十四節気　大寒・南天","厳しい寒気が霊力の輪郭を研ぎ澄まし、精密な操作を安定させます。"]
+    ]
+  },
+  3:{
+    season:"春・夏",
+    scenery:[
+      ["二十四節気　春分・白木蓮","春の光に映える白木蓮の明るい景色が霊力の顕在化を促し、外部への伝達を滑らかにします。"],
+      ["二十四節気　小暑・蓮","夏の光と蓮の清らかな気配が、「明」の性質を持つ霊力を鮮明な形で表出させやすくします。"]
+    ]
+  },
+  2:{
+    season:"春・秋",
+    scenery:[
+      ["二十四節気　雨水・菜の花","春風に揺れるような菜の花のやわらかな景色が霊力の硬直を防ぎ、周囲に合わせた自然な変化を助けます。"],
+      ["二十四節気　処暑・秋桜","夕暮れに染まる秋桜と季節の移ろいが霊力の柔軟な変化を促し、周囲の気配へ無理なく馴染ませます。"]
+    ]
+  },
+  4:{
+    season:"夏・冬",
+    scenery:[
+      ["二十四節気　大暑・朝顔","盛夏の陽気と鮮やかに咲き広がる朝顔が高出力の霊力と共鳴し、大きな力を損なわず発揮しやすくします。"],
+      ["二十四節気　大雪・山茶花","雪に覆われた厳しい冬景色の中でも咲く山茶花の力強さが霊力を支え、高い出力を安定して維持しやすくします。"]
+    ]
+  },
+  7:{
+    season:"秋・冬",
+    scenery:[
+      ["二十四節気　秋分・彼岸花","夕暮れに広がる彼岸花が季節の境界を思わせ、深層へ向かう霊力との接続を強めます。"],
+      ["二十四節気　冬至・冬牡丹","一年でもっとも静かな時期、雪に包まれた冬牡丹の気配が霊力を内側へ沈め、深い領域への干渉を安定させます。"]
+    ]
+  },
+  5:{
+    season:"秋・冬",
+    scenery:[
+      ["二十四節気　白露・竜胆","朝靄に包まれた竜胆の静かな景色が霊力の波立ちを鎮め、穏やかで一定した状態を長く保ちやすくします。"],
+      ["二十四節気　小雪・寒椿","音の少ない冬の気配が霊力を鎮め、外部からの影響を受けにくい状態へ整えます。"]
+    ]
+  },
+  8:{
+    season:"春・冬",
+    scenery:[
+      ["二十四節気　啓蟄・木瓜","動き始める春の気と咲き広がる木瓜が霊力の循環を促し、滞留した力を自然に巡らせます。"],
+      ["二十四節気　立冬・菊","冬へ移りゆく穏やかな庭と咲き並ぶ菊の気配が霊力の再配分を助け、必要な場所へ力を移しやすくします。"]
+    ]
+  },
+  6:{
+    season:"春・夏",
+    scenery:[
+      ["二十四節気　立春・梅","春の始まりに咲く梅の穏やかな気配が霊力を柔らかく整え、周囲との馴染みを促します。"],
+      ["二十四節気　立夏・藤","初夏に咲き連なる藤の柔らかな気配が霊的存在への刺激を和らげ、安定した接続を助けます。"]
+    ]
+  },
+  11:{
+    season:"夏・秋",
+    scenery:[
+      ["二十四節気　芒種・花菖蒲","水気を含む季節の気配が霊的な感受性を整え、神霊との接続を滑らかにします。"],
+      ["二十四節気　寒露・金木犀","秋の澄んだ気配が現世と霊的領域の境を捉えやすくし、高い親和性を安定させます。"]
+    ]
+  },
+  22:{
+    season:"夏・秋",
+    scenery:[
+      ["二十四節気　小満・百合","満ちていく季節の力が高密度な霊力と噛み合い、凝縮した状態を維持しやすくします。"],
+      ["二十四節気　霜降・藤袴","秋の深まりと藤袴の穏やかな気配が霊力を内側へ集め、密度を保ったまま安定させます。"]
+    ]
+  },
+  33:{
+    season:"春・秋",
+    scenery:[
+      ["二十四節気　穀雨・桐","春のやわらかな光と新緑の気配が霊力を周囲へ穏やかに馴染ませ、存在感を抑えた運用を助けます。"],
+      ["二十四節気　立秋・向日葵","青空と向日葵の爽やかに開けた景色が霊力を広く自然に馴染ませ、周囲へ溶け込むような低干渉の状態を保ちやすくします。"]
+    ]
+  }
+};
+
+function renderEnvironment(reiryokuKey){
+  const data=environmentByReiryoku[reiryokuKey];
+  if(!data) return;
+  document.getElementById("compatibleSeason").textContent=data.season;
+  document.getElementById("sceneryName1").textContent=data.scenery[0][0];
+  document.getElementById("sceneryComment1").textContent=data.scenery[0][1];
+  document.getElementById("sceneryName2").textContent=data.scenery[1][0];
+  document.getElementById("sceneryComment2").textContent=data.scenery[1][1];
+}
+
+function renderCompatibility(operationKey,reiryokuKey,bondingKey){
+  const swordType=swordTypeByOperation[operationKey] || "―";
+  const schoolA=schoolByReiryoku[reiryokuKey] || "";
+  const schoolB=schoolByBonding[bondingKey] || "";
+
+  document.getElementById("compatibleSwordType").textContent=swordType;
+
+  const schoolEl=document.getElementById("compatibleSchool");
+  const specialEl=document.getElementById("compatibleSchoolSpecial");
+  const textEl=document.getElementById("compatibleSchoolText");
+
+  if(schoolA && schoolA===schoolB){
+    schoolEl.textContent=schoolA;
+    specialEl.style.display="block";
+    specialEl.textContent="特記｜極めて高い適合反応を確認";
+    textEl.textContent="複数の観測項目において、同一刀派への適合反応が重複して確認されました。当該刀派との適合性は、特に高い水準にあるものと推定されます。";
+  }else{
+    schoolEl.textContent=[schoolA,schoolB].filter(Boolean).join("・") || "―";
+    specialEl.style.display="none";
+    specialEl.textContent="";
+    textEl.textContent="複数の観測項目から、これらの刀派との良好な適合傾向が確認されています。";
+  }
+}
 
 function digitalRoot(n){
   let s=String(Math.abs(n)).split("").reduce((a,b)=>a+Number(b),0);
@@ -383,7 +598,7 @@ const birthTimeMods={
     effect:"結縁力 +10 ／ 霊力量 -10"
   },
   unknown:{
-    label:"不明",note:"出生時間帯による補正を行いません",
+    label:"不明",note:"出生時間帯による追加判定は行いません",
     power:0,control:0,sens:0,bond:0,divine:0,
     effect:"補正なし"
   }
@@ -460,7 +675,7 @@ function diagnose(){
 
   const secondary=operation[birth][0];
   document.getElementById("type").textContent=primary+" ／ "+secondary;
-  document.getElementById("typeSub").textContent="霊質："+quality[yn][0]+"　｜　感応："+sensitivity[mn][0]+"　｜　結縁："+bonding[dn][0];
+  document.getElementById("typeSub").textContent="霊力の質："+quality[yn][0]+"　｜　感応："+sensitivity[mn][0]+"　｜　結縁："+bonding[dn][0];
   document.getElementById("rank").textContent="審神者適性："+rank;
 
   document.getElementById("timeResult").innerHTML=
@@ -503,7 +718,10 @@ function diagnose(){
       ${x[3]?`<a class="trait-link" href="${x[3]}">詳細解説を見る →</a>`:""}
     </div>`).join("");
 
-  let comment=`鑑定結果：${primary}。${quality[yn][0]}の霊質を持ち、${sensitivity[mn][0]}による感応と、${bonding[dn][0]}の結縁傾向が確認されます。出生時間帯「${timeMod.label}」の補正を含む総合適性は${rank}に分類されます。`;
+  renderCompatibility(birth,yn,dn);
+  renderEnvironment(yn);
+
+  let comment=`鑑定結果：${primary}。霊力は${quality[yn][0]}に分類され、${sensitivity[mn][0]}による感応と、${bonding[dn][0]}の結縁傾向が確認されます。総合適性は${rank}に分類されます。`;
   if(divine>=85) comment+=" 神霊親和性が高く、通常の刀剣との結縁とは異なる霊的接続が生じる可能性があります。";
   if([power,control,sens,bond,divine,overall].some(v=>v>100)) comment+=" 一部の測定値が規定上限を超過したため、該当項目は数値による表示対象外となっています。";
   document.getElementById("comment").textContent=comment;
@@ -511,11 +729,11 @@ function diagnose(){
   const specials=[];
   if(sens>=90 && control<60) specials.push("感応特化：感じ取る力が非常に強い一方、制御には注意を要します。");
   if(power>=85 && control<55) specials.push("霊力過多：高出力型。運用時の負荷管理を推奨します。");
-  if(power<60 && control>=85) specials.push("精密運用：総量よりも制御効率に優れています。");
+  if(power<60 && control>=85) specials.push("精密運用：霊力総量よりも制御効率に優れています。");
   if(sens>=80 && bond>=85) specials.push("共鳴特化：刀剣との精神的・霊的な接続に優れます。");
   if(divine>=85) specials.push("神霊接続：神格存在への高い親和性が確認されています。");
   if([power,control,sens,bond,divine,overall].some(v=>v>100)) specials.push("測定上限超過：規定値100を超える反応を検出。通常の数値評価では測定不能として記録されます。");
-  if([11,22,33].includes(birth)) specials.push("特殊観測対象：誕生数にマスターナンバーを確認。通常分類とは別途記録されます。");
+  if([11,22,33].includes(birth)) specials.push("特殊観測対象：通常値とは異なる霊力波形を確認。特記事項として別途記録されます。");
   const sp=document.getElementById("special");
   sp.style.display=specials.length?"block":"none";
   sp.innerHTML=specials.length?"<b>特記事項</b><br>"+specials.join("<br>"):"";
