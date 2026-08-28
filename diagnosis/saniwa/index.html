@@ -1,1 +1,556 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>非公式・審神者適性鑑定書｜時の政府風</title>
+<style>
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:#e9e2d4;color:#29241f;
+  font-family:'Yu Mincho','Hiragino Mincho ProN','Noto Serif JP',serif;
+}
+.wrap{width:min(980px,94%);margin:52px auto 80px}
+.header{
+  text-align:center;padding:40px 25px;margin-bottom:26px;
+  background:#fbf8f0;border:1px solid #b9ad96;border-top:5px solid #772b2b;
+  box-shadow:0 7px 24px #0002;
+}
+.seal{
+  display:inline-flex;width:54px;height:54px;border:2px solid #772b2b;border-radius:50%;
+  align-items:center;justify-content:center;color:#772b2b;font-weight:bold;
+  letter-spacing:.08em;font-size:12px;margin-bottom:12px
+}
+.kicker{font-size:13px;letter-spacing:.28em;color:#7d6e59}
+h1{font-size:30px;letter-spacing:.14em;margin:8px 0}
+.sub{max-width:760px;margin:auto;font-size:14px;color:#776e62;line-height:1.9}
+.panel{
+  background:#fbf8f0;border:1px solid #b9ad96;
+  box-shadow:0 7px 24px #0002;margin-bottom:26px;
+}
+.input-panel{padding:28px 34px;text-align:center}
+.input-panel:before{
+  content:"時の政府 審神者適性鑑定";
+  display:block;color:#772b2b;font-size:12px;letter-spacing:.16em;margin-bottom:18px
+}
+label{display:block;font-size:15px;color:#4d4034;margin-bottom:14px;font-weight:bold}
+.date-row{display:flex;gap:12px;justify-content:center;align-items:end;flex-wrap:wrap}
+.field{width:132px}
+.field input{
+  width:100%;padding:12px 10px;border:1px solid #c9bda7;background:#fffdf8;
+  color:#29241f;font:inherit;text-align:center;font-size:17px
+}
+button{
+  margin-top:22px;padding:13px 34px;border:1px solid #692524;background:#772b2b;
+  color:#fff;font-family:inherit;letter-spacing:.15em;cursor:pointer;
+  box-shadow:0 3px 8px #0001
+}
+button:hover{filter:brightness(1.06)}
+.note{font-size:12px;color:#776e62;margin-top:12px;line-height:1.7}
+#error{color:#772b2b;font-size:13px;margin-top:10px;min-height:18px}
 
+#result{display:none;scroll-margin-top:20px}
+.result-head{
+  padding:28px 30px;text-align:center;background:#f4ecdf;border-bottom:1px solid #c9bfa9
+}
+.result-head .stamp{font-size:12px;color:#772b2b;letter-spacing:.22em}
+.type{font-size:29px;font-weight:bold;margin:9px 0 4px;letter-spacing:.12em}
+.type-sub{color:#776e62;font-size:14px;line-height:1.8}
+.rank{
+  display:inline-block;margin-top:14px;padding:5px 14px;
+  border-block:1px solid #a58a52;color:#6b552f;font-size:13px;letter-spacing:.1em
+}
+.content{padding:28px 34px;line-height:1.95}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.stat{
+  background:#fffdf8;border:1px solid #d2c8b5;padding:16px 18px
+}
+.stat-top{display:flex;justify-content:space-between;align-items:baseline}
+.stat-name{font-size:14px;color:#4d4034;font-weight:bold}
+.stat-score{font-size:22px}
+.bar{height:5px;background:#ded6c8;margin-top:10px;overflow:hidden}
+.fill{height:100%;background:#772b2b;transition:width .5s}
+.small{font-size:12px;color:#776e62;margin-top:6px;line-height:1.6}
+
+.traits{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:22px}
+.trait{
+  position:relative;border:1px solid #d2c8b5;border-top:3px solid #a58a52;
+  background:#fffdf8;padding:18px 20px;min-height:148px
+}
+.trait b{display:block;color:#772b2b;font-size:15px;letter-spacing:.04em}
+.trait div{font-size:13px;color:#5d5449;margin-top:7px;line-height:1.8}
+.trait-link{
+  display:inline-block;margin-top:12px;padding-bottom:2px;font-size:12px;
+  color:#772b2b;text-decoration:none;border-bottom:1px solid #772b2b66
+}
+.trait-link:hover{border-color:#772b2b}
+
+.comment{
+  margin-top:22px;padding:18px 20px;border:1px solid #d2c8b5;
+  border-left:4px solid #8b4a3e;background:#fffdf8;line-height:1.95;font-size:14px
+}
+.special{
+  margin-top:18px;padding:18px 20px;border:1px solid #d2c8b5;
+  background:#eee7d9;font-size:13px;line-height:1.9
+}
+.result-actions{
+  display:none;text-align:center;margin:-8px 0 26px;padding:20px;
+  background:#f4ecdf;border:1px solid #b9ad96;border-top:0;
+  box-shadow:0 7px 24px #0001
+}
+.action-buttons{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
+.save-btn,.share-btn{margin-top:0;font-size:12px}
+.save-btn{background:#4b453b;border-color:#4b453b}
+.share-btn{background:#29241f;border-color:#29241f}
+.result-actions .note{margin-top:10px}
+.disclaimer{
+  text-align:center;padding:20px;font-size:13px;color:#776e62;
+  background:#fbf8f0;border:1px solid #b9ad96;box-shadow:0 7px 24px #0001;
+  line-height:1.8
+}
+.footer{text-align:center;color:#776e62;font-size:11px;letter-spacing:.1em;margin-top:18px}
+
+
+.time-block{margin:24px auto 0;max-width:760px;padding-top:20px;border-top:1px solid #d2c8b5}
+.time-label{font-size:15px;color:#4d4034;font-weight:bold;margin-bottom:12px}
+.time-options{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+.time-option{position:relative}
+.time-option input{position:absolute;opacity:0;pointer-events:none}
+.time-option span{
+  display:block;padding:11px 6px;border:1px solid #c9bda7;background:#fffdf8;
+  color:#4d4034;font-size:13px;cursor:pointer;transition:.15s;text-align:center
+}
+.time-option span small{display:block;margin-top:3px;font-size:10px;color:#8a7c6c;font-weight:normal}
+.time-option input:checked+span{
+  border-color:#772b2b;background:#f4ecdf;color:#772b2b;
+  box-shadow:inset 0 0 0 1px #772b2b33;font-weight:bold
+}
+.time-option span:hover{border-color:#a58a52}
+.time-result{
+  margin:0 0 18px;padding:12px 15px;border:1px solid #d2c8b5;background:#eee7d9;
+  font-size:12px;color:#5d5449;line-height:1.8
+}
+.stat.unmeasurable{
+  border-color:#9b7649;background:linear-gradient(135deg,#fffdf8 0%,#f1e7d5 100%);
+  box-shadow:inset 0 0 0 1px #a58a5233
+}
+.stat.unmeasurable .stat-score{font-size:17px;color:#772b2b;font-weight:bold;letter-spacing:.06em}
+.stat.unmeasurable .bar{background:#d8c7a9}
+.stat.unmeasurable .fill{width:100%!important;background:repeating-linear-gradient(90deg,#772b2b 0 8px,#a58a52 8px 16px)}
+.measure-note{color:#772b2b;font-weight:bold}
+
+@media(max-width:720px){
+  .wrap{margin:18px auto 60px}
+  h1{font-size:24px}
+  .grid,.traits{grid-template-columns:1fr}
+  .content,.input-panel{padding:20px 17px}
+  .header{padding:30px 18px}
+  .field{width:100px}
+  .time-options{grid-template-columns:repeat(3,1fr)}
+  .type{font-size:23px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="header">
+    <div class="seal">時の政府</div>
+    <div class="kicker">UNOFFICIAL FAN-MADE ASSESSMENT</div>
+    <h1>非公式・審神者適性鑑定書</h1>
+    <div class="sub">刀剣乱舞 二次創作・ファンメイド診断｜霊力の質・感応特性・結縁特性・本丸運用に基づく基礎適性鑑定</div>
+  </header>
+
+  <section class="panel input-panel">
+    <label>生年月日を入力してください</label>
+    <div class="date-row">
+      <div class="field"><input id="year" type="number" min="1" max="9999" placeholder="2000"><div class="small">年</div></div>
+      <div class="field"><input id="month" type="number" min="1" max="12" placeholder="1"><div class="small">月</div></div>
+      <div class="field"><input id="day" type="number" min="1" max="31" placeholder="1"><div class="small">日</div></div>
+    </div>
+
+    <div class="time-block">
+      <div class="time-label">出生時間帯を選択してください</div>
+      <div class="time-options">
+        <label class="time-option"><input type="radio" name="birthTime" value="dawn"><span>夜明け<small>日の出頃</small></span></label>
+        <label class="time-option"><input type="radio" name="birthTime" value="morning"><span>朝<small>午前</small></span></label>
+        <label class="time-option"><input type="radio" name="birthTime" value="day"><span>昼<small>日中</small></span></label>
+        <label class="time-option"><input type="radio" name="birthTime" value="dusk"><span>夕暮れ<small>日没頃</small></span></label>
+        <label class="time-option"><input type="radio" name="birthTime" value="evening"><span>宵<small>日没後～深夜</small></span></label>
+        <label class="time-option"><input type="radio" name="birthTime" value="unknown" checked><span>不明<small>補正なし</small></span></label>
+      </div>
+      <div class="note">※出生時刻が分からない場合は「不明」を選択してください。出生時間帯は能力値補正の算定にのみ参照され、霊力の質・感応特性・結縁特性・本丸運用の各分類には影響しません。</div>
+    </div>
+
+    <button onclick="diagnose()">適性を鑑定する</button>
+    <div id="error"></div>
+    <div class="note">※本鑑定は生年月日の数字をもとにした創作上の適性診断です。</div>
+  </section>
+
+  <section id="result" class="panel">
+    <div class="result-head">
+      <div class="stamp">非公式ファンメイド鑑定結果 · FAN-MADE</div>
+      <div id="type" class="type">—</div>
+      <div id="typeSub" class="type-sub">—</div>
+      <div id="rank" class="rank">—</div>
+    </div>
+    <div class="content">
+      <div id="timeResult" class="time-result"></div>
+      <div class="grid" id="stats"></div>
+      <div class="traits" id="traits"></div>
+      <div id="comment" class="comment"></div>
+      <div id="special" class="special" style="display:none"></div>
+    </div>
+  </section>
+
+  <div id="resultActions" class="result-actions">
+    <div class="action-buttons">
+      <button class="save-btn" onclick="saveResultImage()">鑑定結果を画像として保存</button>
+      <button class="share-btn" onclick="shareToX()">Xで結果をシェア</button>
+    </div>
+    <div class="note">※Xへの画像添付は、保存した画像を投稿画面から追加してください。</div>
+  </div>
+
+  <div class="disclaimer">※この診断は非公式のファンメイドコンテンツです。『刀剣乱舞ONLINE』および公式のゲーム設定・運営・関係各社とは一切関係ありません。</div>
+  <div class="footer">審神者適性鑑定システム / ver.1.0</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script>
+const nums=[1,2,3,4,5,6,7,8,9,11,22,33];
+
+const quality={
+1:["鋭質","霊力の精密操作・瞬間的な作用に優れる"],
+2:["柔質","対象に合わせた柔軟な霊力調整に優れる"],
+3:["明質","霊力の伝達・可視化・顕在化に優れる"],
+4:["強質","高出力の霊力運用に優れる"],
+5:["静質","霊力の静穏化・安定化に特に優れる"],
+6:["温質","霊的存在の鎮静・馴染みを特に得意とする"],
+7:["深質","深層への霊力干渉・接続に優れる"],
+8:["流質","霊力の循環・再配分に優れる"],
+9:["澄質","霊力の純度・安定性に優れる"],
+11:["霊質","神霊・付喪神との親和性が特に高い"],
+22:["濃質","高密度・凝縮された霊力運用に優れる"],
+33:["淡質","低干渉・低存在感の霊力運用に優れる"]
+};
+const sensitivity={
+1:["予兆感応","発生前の異常・危険兆候の察知に優れる"],
+2:["共鳴感応","他者・霊的存在との波長同調に優れる"],
+3:["言霊感応","言葉・名称に宿る霊的作用の感知に優れる"],
+4:["構造感応","霊力構造・術式構造の把握に優れる"],
+5:["境界感応","結界・時空・現世と異界の境界察知に特に優れる"],
+6:["感情感応","霊的存在の感情変化の把握に優れる"],
+7:["記憶感応","記憶・過去の霊的情報の感知に特に優れる"],
+8:["連動感応","離れた場所の異常や複数現象のつながりを察知する"],
+9:["夢見感応","夢・無意識を介した霊的情報の感知に優れる"],
+11:["共感感応","他者の感情・状態への感応性が高い"],
+22:["透視感応","表面から見えない霊的構造の把握に優れる"],
+33:["残響感応","過去に残された霊的痕跡の解析に特に優れる"]
+};
+const bonding={
+1:["主導型","明確な意思による結縁形成に優れる"],2:["対話型","会話・意思疎通を通じた結縁形成に優れる"],
+3:["親愛型","日常的な親しみ・好意による結縁形成に優れる"],4:["信頼型","相互信頼を基盤とした安定的な結縁形成に特に優れる"],
+5:["自由型","相手の自主性を尊重した結縁形成に優れる"],6:["庇護型","安心感・保護を基盤とした結縁形成に特に優れる"],
+7:["理解型","相手の価値観・背景を理解した結縁形成に優れる"],8:["統率型","集団としての結束を形成することに優れる"],
+9:["宿縁型","特殊な因縁・霊的つながりを持つ相手との結縁に優れる"],11:["二重結縁型","複数の関係性を並行して維持することに優れる"],
+22:["構築結縁型","時間と経験を積み重ねた結縁形成に優れる"],33:["深縁型","個体との深層的な結縁形成に特に優れる"]
+};
+const operation={
+1:["探索型","未知の情報・場所・可能性を探ることに優れる"],
+2:["調整型","異なる個体・役割・意見を統合する能力に特に優れる"],
+3:["継承型","経験・知識・技術を次代へ残すことに優れる"],
+4:["管理型","資源・人員・業務の安定管理に優れる"],
+5:["機動型","状況変化への迅速な対応に優れる"],
+6:["育成型","個体の成長・能力開発を支援することに優れる"],
+7:["分析型","情報整理・状況分析・判断材料の抽出に特に優れる"],
+8:["指揮型","多数の戦力を統合し、明確な指示を出すことに特に優れる"],
+9:["守備型","本丸の防衛・危機管理に特に優れる"],
+11:["開拓型","新制度・新戦術・新しい運用方法の構築に優れる"],
+22:["儀礼型","日常的な儀礼・習慣による本丸の安定維持に優れる"],
+33:["実務型","日常業務を正確・効率的に処理することに優れる"]
+};
+
+const controlBase={1:55,2:65,3:45,4:85,5:50,6:75,7:80,8:60,9:70,11:65,22:90,33:75};
+const qControl={1:-5,2:5,3:-5,4:10,5:-10,6:5,7:5,8:-5,9:10,11:0,22:10,33:5};
+const sensBase={1:55,2:75,3:60,4:65,5:70,6:80,7:90,8:65,9:95,11:100,22:80,33:100};
+const bondBase={1:65,2:75,3:80,4:70,5:60,6:90,7:85,8:80,9:95,11:90,22:85,33:100};
+const qSens={1:0,2:5,3:0,4:0,5:0,6:5,7:10,8:0,9:5,11:10,22:0,33:0};
+const qBond={1:-5,2:10,3:0,4:0,5:0,6:10,7:5,8:-5,9:5,11:0,22:0,33:15};
+const masterBonus={1:0,2:0,3:0,4:0,5:0,6:0,7:0,8:0,9:0,11:5,22:8,33:10};
+
+function digitalRoot(n){
+  let s=String(Math.abs(n)).split("").reduce((a,b)=>a+Number(b),0);
+  if([11,22,33].includes(s)) return s;
+  while(s>=10) s=String(s).split("").reduce((a,b)=>a+Number(b),0);
+  return s;
+}
+function clamp(n){return Math.max(0,Math.min(100,Math.round(n)));}
+
+const reiryokuDetailIds={
+  1:"reiryoku-sharp",
+  2:"reiryoku-flexible",
+  3:"reiryoku-luminous",
+  4:"reiryoku-powerful",
+  5:"reiryoku-still",
+  6:"reiryoku-warmth",
+  7:"reiryoku-deep",
+  8:"reiryoku-flow",
+  9:"reiryoku-clear",
+  11:"reiryoku-spirit",
+  22:"reiryoku-density",
+  33:"reiryoku-light"
+};
+const sensitivityDetailIds={
+  1:"sensitivity-premonition",
+  2:"sensitivity-resonance",
+  3:"sensitivity-word",
+  4:"sensitivity-structure",
+  5:"sensitivity-boundary",
+  6:"sensitivity-emotion",
+  7:"sensitivity-memory",
+  8:"sensitivity-synchronicity",
+  9:"sensitivity-dream",
+  11:"sensitivity-empathy",
+  22:"sensitivity-perception",
+  33:"sensitivity-echo"
+};
+const bondingDetailIds={
+  1:"bond-leadership",2:"bond-dialogue",3:"bond-affection",4:"bond-trust",
+  5:"bond-freedom",6:"bond-protection",7:"bond-understanding",8:"bond-command",
+  9:"bond-fated",11:"bond-dual",22:"bond-building",33:"bond-deep"
+};
+
+const birthTimeMods={
+  dawn:{
+    label:"夜明け",note:"境界の気配を捉えやすい時間帯",
+    power:0,control:0,sens:10,bond:0,divine:-10,
+    effect:"感応力 +10 ／ 神霊親和性 -10"
+  },
+  morning:{
+    label:"朝",note:"霊力を整え、明瞭に扱いやすい時間帯",
+    power:0,control:10,sens:-10,bond:0,divine:0,
+    effect:"制御力 +10 ／ 感応力 -10"
+  },
+  day:{
+    label:"昼",note:"現世側の霊力が強く表れやすい時間帯",
+    power:10,control:0,sens:0,bond:-10,divine:0,
+    effect:"霊力量 +10 ／ 結縁力 -10"
+  },
+  dusk:{
+    label:"夕暮れ",note:"現世と霊的領域の境界が薄まりやすい時間帯",
+    power:0,control:-10,sens:0,bond:0,divine:10,
+    effect:"神霊親和性 +10 ／ 制御力 -10"
+  },
+  evening:{
+    label:"宵",note:"外へ放つ力より、縁と接続へ霊力が向かいやすい時間帯",
+    power:-10,control:0,sens:0,bond:10,divine:0,
+    effect:"結縁力 +10 ／ 霊力量 -10"
+  },
+  unknown:{
+    label:"不明",note:"出生時間帯による補正を行いません",
+    power:0,control:0,sens:0,bond:0,divine:0,
+    effect:"補正なし"
+  }
+};
+
+const operationDetailIds={
+  1:"operation-exploration",
+  2:"operation-coordination",
+  3:"operation-inheritance",
+  4:"operation-management",
+  5:"operation-mobility",
+  6:"operation-development",
+  7:"operation-analysis",
+  8:"operation-command",
+  9:"operation-defense",
+  11:"operation-pioneer",
+  22:"operation-ritual",
+  33:"operation-practical"
+};
+
+function diagnose(){
+  const y=Number(document.getElementById("year").value);
+  const m=Number(document.getElementById("month").value);
+  const d=Number(document.getElementById("day").value);
+  const err=document.getElementById("error");
+  err.textContent="";
+  if(!y || y<1 || m<1 || m>12 || d<1 || d>31){err.textContent="正しい生年月日を入力してください。";return;}
+  const maxDay=new Date(y,m,0).getDate();
+  if(d>maxDay){err.textContent="その月の日付として正しくありません。";return;}
+
+  const timeChoice=document.querySelector('input[name="birthTime"]:checked');
+  const timeKey=timeChoice?timeChoice.value:"unknown";
+  const timeMod=birthTimeMods[timeKey]||birthTimeMods.unknown;
+
+  const yn=digitalRoot(y), mn=digitalRoot(m), dn=digitalRoot(d);
+  const birth=digitalRoot(String(y)+String(m).padStart(2,"0")+String(d).padStart(2,"0"));
+
+  // 従来の計算式。ここで一度0～100に収め、従来版と同じ基礎能力値を確定する。
+  const basePower=clamp(20+((yn+mn+dn+birth)/4)*8+masterBonus[birth]);
+  const baseControl=clamp(controlBase[birth]+qControl[yn]);
+  const baseSens=clamp(sensBase[mn]+qSens[yn]);
+  const baseBond=clamp(bondBase[dn]+qBond[yn]);
+
+  let divineBase=sensBase[mn]*.5+controlBase[yn]*.3+controlBase[birth]*.2;
+  let divMod=0;
+  if(mn===9)divMod+=15;if(mn===7)divMod+=10;if(mn===11)divMod+=15;
+  if(yn===7)divMod+=10;if(yn===9)divMod+=10;if(yn===8)divMod+=5;if(yn===11)divMod+=10;if(yn===33)divMod+=15;
+  const baseDivine=clamp(divineBase+divMod);
+
+  // 出生時間帯は能力値にだけ±10補正。上限100では切らず、101以上を「測定不能」として扱う。
+  const power=Math.max(0,basePower+timeMod.power);
+  const control=Math.max(0,baseControl+timeMod.control);
+  const sens=Math.max(0,baseSens+timeMod.sens);
+  const bond=Math.max(0,baseBond+timeMod.bond);
+  const divine=Math.max(0,baseDivine+timeMod.divine);
+
+  // 総合適性のみ、出生時間補正後の主要4能力から従来と同じ重みで再計算。
+  const overall=Math.round(power*.20+control*.25+sens*.25+bond*.30);
+  const rank=overall<45?"丁種":overall<60?"丙種":overall<75?"乙種":overall<90?"甲種":"特殊甲種";
+
+  // 主タイプは従来の基礎値から判定し、出生時間帯によって変化させない。
+  let primary="標準型";
+  if(baseDivine>=85) primary="神霊接続型";
+  else if(dn===9 && baseBond>=90) primary="宿縁型";
+  else if(baseSens>=80 && baseBond>=85) primary="共鳴型";
+  else if(baseSens>=90 && baseControl<60) primary="感応特化型";
+  else if(basePower>=85 && baseControl<55) primary="霊力過多型";
+  else if(basePower<60 && baseControl>=85) primary="精密運用型";
+  else if(yn===7) primary="感応型";
+  else if(yn===6) primary="庇護型";
+  else if(yn===5) primary="適応型";
+  else if(yn===4) primary="維持型";
+  else if(yn===8) primary="統率型";
+
+  const secondary=operation[birth][0];
+  document.getElementById("type").textContent=primary+" ／ "+secondary;
+  document.getElementById("typeSub").textContent="霊質："+quality[yn][0]+"　｜　感応："+sensitivity[mn][0]+"　｜　結縁："+bonding[dn][0];
+  document.getElementById("rank").textContent="審神者適性："+rank;
+
+  document.getElementById("timeResult").innerHTML=
+    `<b>出生時間帯：${timeMod.label}</b><br><span class="small">${timeMod.note}</span>`;
+
+  const statData=[
+    ["霊力量",power,"霊力の総量"],
+    ["制御力",control,"霊力を安定して扱う力"],
+    ["感応力",sens,"霊的存在・気配を感じ取る力"],
+    ["結縁力",bond,"刀剣・神霊との縁を結ぶ力"],
+    ["神霊親和性",divine,"神格存在との接続適性"],
+    ["総合適性",overall,"主要4能力から算出"]
+  ];
+
+  document.getElementById("stats").innerHTML=statData.map(x=>{
+    const over=x[1]>100;
+    const shown=over?"測定不能":x[1];
+    const width=Math.min(100,x[1]);
+    const desc=over
+      ? `${x[2]}<br><span class="measure-note">規定測定上限（100）を超過</span>`
+      : x[2];
+    return `
+      <div class="stat${over?" unmeasurable":""}">
+        <div class="stat-top"><span class="stat-name">${x[0]}</span><span class="stat-score">${shown}</span></div>
+        <div class="bar"><div class="fill" style="width:${width}%"></div></div>
+        <div class="small">${desc}</div>
+      </div>`;
+  }).join("");
+
+  const traits=[
+    ["霊力の質",quality[yn][0],quality[yn][1],`reiryoku_details.html#${reiryokuDetailIds[yn]}`],
+    ["感応特性",sensitivity[mn][0],sensitivity[mn][1],`sensitivity_details.html#${sensitivityDetailIds[mn]}`],
+    ["結縁特性",bonding[dn][0],bonding[dn][1],`bonding_details.html#${bondingDetailIds[dn]}`],
+    ["本丸運用",operation[birth][0],operation[birth][1],`operation_details.html#${operationDetailIds[birth]}`]
+  ];
+  document.getElementById("traits").innerHTML=traits.map(x=>`
+    <div class="trait">
+      <b>${x[0]}：${x[1]}</b>
+      <div>${x[2]}</div>
+      ${x[3]?`<a class="trait-link" href="${x[3]}">詳細解説を見る →</a>`:""}
+    </div>`).join("");
+
+  let comment=`鑑定結果：${primary}。${quality[yn][0]}の霊質を持ち、${sensitivity[mn][0]}による感応と、${bonding[dn][0]}の結縁傾向が確認されます。出生時間帯「${timeMod.label}」の補正を含む総合適性は${rank}に分類されます。`;
+  if(divine>=85) comment+=" 神霊親和性が高く、通常の刀剣との結縁とは異なる霊的接続が生じる可能性があります。";
+  if([power,control,sens,bond,divine,overall].some(v=>v>100)) comment+=" 一部の測定値が規定上限を超過したため、該当項目は数値による表示対象外となっています。";
+  document.getElementById("comment").textContent=comment;
+
+  const specials=[];
+  if(sens>=90 && control<60) specials.push("感応特化：感じ取る力が非常に強い一方、制御には注意を要します。");
+  if(power>=85 && control<55) specials.push("霊力過多：高出力型。運用時の負荷管理を推奨します。");
+  if(power<60 && control>=85) specials.push("精密運用：総量よりも制御効率に優れています。");
+  if(sens>=80 && bond>=85) specials.push("共鳴特化：刀剣との精神的・霊的な接続に優れます。");
+  if(divine>=85) specials.push("神霊接続：神格存在への高い親和性が確認されています。");
+  if([power,control,sens,bond,divine,overall].some(v=>v>100)) specials.push("測定上限超過：規定値100を超える反応を検出。通常の数値評価では測定不能として記録されます。");
+  if([11,22,33].includes(birth)) specials.push("特殊観測対象：誕生数にマスターナンバーを確認。通常分類とは別途記録されます。");
+  const sp=document.getElementById("special");
+  sp.style.display=specials.length?"block":"none";
+  sp.innerHTML=specials.length?"<b>特記事項</b><br>"+specials.join("<br>"):"";
+
+  document.getElementById("result").style.display="block";
+  document.getElementById("resultActions").style.display="block";
+  document.getElementById("result").scrollIntoView({behavior:"smooth",block:"start"});
+}
+function saveResultImage(){
+  const result=document.getElementById("result");
+  if(!result || result.style.display==="none") return;
+  if(typeof html2canvas==="undefined"){
+    alert("画像保存機能の読み込みに失敗しました。インターネット接続を確認してください。");
+    return;
+  }
+  const btn=document.querySelector(".save-btn");
+  const oldText=btn.textContent;
+  btn.textContent="画像を作成中…";
+  btn.disabled=true;
+  html2canvas(result,{
+    backgroundColor:"#f7f3e9",
+    scale:2,
+    useCORS:true
+  }).then(canvas=>{
+    const y=document.getElementById("year").value;
+    const m=String(document.getElementById("month").value).padStart(2,"0");
+    const d=String(document.getElementById("day").value).padStart(2,"0");
+    const link=document.createElement("a");
+    link.download=`saniwa-result-${y}${m}${d}.png`;
+    link.href=canvas.toDataURL("image/png");
+    link.click();
+  }).catch(()=>{
+    alert("画像の作成に失敗しました。");
+  }).finally(()=>{
+    btn.textContent=oldText;
+    btn.disabled=false;
+  });
+}
+
+function shareToX(){
+  const result=document.getElementById("result");
+  if(!result || result.style.display==="none") return;
+
+  const rank=document.getElementById("rank").textContent.trim();
+  const traitLines=[...document.querySelectorAll("#traits .trait b")]
+    .map(el=>el.textContent.trim());
+
+  const lines=[
+    "【刀剣乱舞・非公式ファンメイド】審神者適性診断をしました。",
+    "",
+    rank,
+    ...traitLines,
+    "",
+    "#非公式審神者適性診断"
+  ];
+
+  const text=lines.join("\n");
+  const isPublicUrl=location.protocol==="http:" || location.protocol==="https:";
+  const shareUrl=isPublicUrl ? location.href.split("#")[0] : "";
+
+  const params=new URLSearchParams({text});
+  if(shareUrl) params.set("url",shareUrl);
+
+  window.open(
+    `https://x.com/intent/tweet?${params.toString()}`,
+    "_blank",
+    "noopener,noreferrer,width=650,height=620"
+  );
+}
+
+
+</script>
+</body>
+</html>
