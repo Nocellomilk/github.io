@@ -363,7 +363,7 @@ button:hover{filter:brightness(1.06)}
       <button class="share-btn" onclick="shareToX()">Xで結果をシェア</button>
     </div>
     <div class="note">※プロフィールカードはスマートフォンでも一定の縦横比で保存できる共有向け画像です。生年月日は画像内に表示されません。<br>
-    ※「詳細な鑑定結果も保存」は従来どおり結果画面全体を画像化します。スマートフォンでは縦長になります。<br>
+    ※「詳細な鑑定結果も保存」は結果画面全体を画像化します。スマートフォンでは縦長になります。<br>
     ※Xへの画像添付は、保存した画像を投稿画面から追加してください。</div>
   </div>
 
@@ -926,9 +926,6 @@ function saveProfileCard(){
     height:1125,
     windowWidth:1200
   }).then(canvas=>{
-    const y=document.getElementById("year").value;
-    const m=String(document.getElementById("month").value).padStart(2,"0");
-    const d=String(document.getElementById("day").value).padStart(2,"0");
     const dataUrl=canvas.toDataURL("image/png");
 
     if(isIOSDevice()){
@@ -937,7 +934,7 @@ function saveProfileCard(){
     }
 
     const link=document.createElement("a");
-    link.download=`saniwa-certificate-${y}${m}${d}.png`;
+    link.download="saniwa-certificate.png";
     link.href=dataUrl;
     document.body.appendChild(link);
     link.click();
@@ -968,9 +965,6 @@ function saveResultImage(){
     scale:2,
     useCORS:true
   }).then(canvas=>{
-    const y=document.getElementById("year").value;
-    const m=String(document.getElementById("month").value).padStart(2,"0");
-    const d=String(document.getElementById("day").value).padStart(2,"0");
     const dataUrl=canvas.toDataURL("image/png");
 
     if(isIOSDevice()){
@@ -979,7 +973,7 @@ function saveResultImage(){
     }
 
     const link=document.createElement("a");
-    link.download=`saniwa-result-${y}${m}${d}.png`;
+    link.download="saniwa-result.png";
     link.href=dataUrl;
     document.body.appendChild(link);
     link.click();
