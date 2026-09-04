@@ -1,1 +1,861 @@
-a
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>非公式・刀剣男士個体観測｜試作</title>
+<style>
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+:root{
+  --bg:#dfe5e8;--paper:#f5f8f9;--paper2:#edf2f4;--ink:#26333a;--muted:#64747c;
+  --line:#aebcc3;--line2:#cad4d8;--navy:#304d60;--blue:#466f86;--pale:#e5edf1;--silver:#82949e;
+}
+body{margin:0;background:linear-gradient(180deg,#d9e1e5 0%,#e8edef 38%,#dfe5e8 100%);color:var(--ink);font-family:'Yu Mincho','Hiragino Mincho ProN','Noto Serif JP',serif}
+.wrap{width:min(980px,94%);margin:48px auto 76px}
+.back{display:inline-block;margin-bottom:15px;padding:9px 14px;border:1px solid #9eafb7;background:#f4f8f9;color:#34586b;text-decoration:none;font-size:12px;font-weight:bold}
+.header{position:relative;text-align:center;padding:40px 26px 36px;margin-bottom:24px;background:rgba(247,250,251,.96);border:1px solid var(--line);border-top:5px solid var(--navy);box-shadow:0 8px 26px #24333b18}
+.header:after{content:"OBSERVATION FILE / TOUKEN INDIVIDUAL";position:absolute;right:18px;bottom:10px;color:#84969f;font:10px/1.4 Arial,sans-serif;letter-spacing:.16em}
+.seal{display:inline-flex;width:58px;height:58px;border:1px solid var(--blue);align-items:center;justify-content:center;color:var(--blue);font-weight:bold;letter-spacing:.08em;font-size:11px;margin-bottom:13px;transform:rotate(-2deg)}
+.kicker{font-size:12px;letter-spacing:.28em;color:var(--silver)}
+h1{font-size:30px;letter-spacing:.14em;margin:8px 0 10px}
+.sub{max-width:780px;margin:auto;font-size:13px;color:var(--muted);line-height:2}
+.unofficial{display:inline-block;margin-top:16px;padding:5px 11px;border:1px solid #99a9b1;color:#61737c;background:#eef3f5;font:10px/1.5 Arial,sans-serif;letter-spacing:.14em}
+.panel{background:rgba(247,250,251,.97);border:1px solid var(--line);box-shadow:0 7px 22px #24333b14;margin-bottom:24px}
+.input-panel{padding:30px 34px}
+.section-code{font:11px/1.4 Arial,sans-serif;letter-spacing:.18em;color:var(--blue);margin-bottom:7px}
+h2{font-size:19px;letter-spacing:.08em;margin:0 0 8px}
+.lead{font-size:13px;color:var(--muted);line-height:1.9;margin:0 0 24px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px 20px}
+.field label,.weather-label{display:block;font-size:13px;color:#43545d;margin-bottom:8px;font-weight:bold}
+.field input{width:100%;padding:12px 13px;border:1px solid #b9c5ca;background:#fbfdfd;color:var(--ink);font:inherit;font-size:15px;outline:none}
+.field input:focus{border-color:var(--blue);box-shadow:0 0 0 2px #466f8618}
+.field.full{grid-column:1/-1}.date-field{max-width:460px}
+.date-parts{display:grid;grid-template-columns:1.6fr .9fr .9fr;gap:8px;align-items:center}
+.date-part{display:flex;align-items:center;gap:6px}.date-part input{min-width:0}.date-unit{font-size:12px;color:#667982;white-space:nowrap}
+.field-note{font-size:10px;color:#7a8b93;margin-top:6px;line-height:1.7}
+.weather-block,.time-block{grid-column:1/-1;margin-top:2px}
+.time-block{margin-top:4px}
+.time-options{display:grid;grid-template-columns:repeat(6,1fr);gap:9px}
+.time-option{position:relative}.time-option input{position:absolute;opacity:0;pointer-events:none}
+.time-option span{display:block;padding:12px 8px;border:1px solid #b9c5ca;background:#f9fbfc;color:#485a63;font-size:13px;text-align:center;cursor:pointer;transition:.15s}
+.time-option span:hover{border-color:#708b99;background:#f2f6f8}
+.time-option input:checked+span{border-color:var(--navy);background:#dfe9ee;color:#253f4e;box-shadow:inset 0 0 0 1px #304d6033;font-weight:bold}
+.weather-options{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+.weather-option{position:relative}.weather-option input{position:absolute;opacity:0;pointer-events:none}
+.weather-option span{display:block;padding:12px 8px;border:1px solid #b9c5ca;background:#f9fbfc;color:#485a63;font-size:13px;text-align:center;cursor:pointer;transition:.15s}
+.weather-option span:hover{border-color:#708b99;background:#f2f6f8}
+.weather-option input:checked+span{border-color:var(--navy);background:#dfe9ee;color:#253f4e;box-shadow:inset 0 0 0 1px #304d6033;font-weight:bold}
+
+.observed-block{grid-column:1/-1;margin-top:24px;padding-top:23px;border-top:1px solid var(--line2)}
+.observed-head{margin-bottom:16px}.observed-head .section-code{margin-bottom:5px}.observed-head h3{font-size:17px;letter-spacing:.08em;margin:0 0 6px}.observed-head p{margin:0;font-size:12px;line-height:1.9;color:var(--muted)}
+.question{margin-top:18px}.question-label{display:block;font-size:13px;color:#43545d;margin-bottom:8px;font-weight:bold}.question-hint{font-size:10px;color:#7a8b93;font-weight:normal;margin-left:5px}
+.choice-options{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}.choice-option{position:relative}.choice-option input{position:absolute;opacity:0;pointer-events:none}.choice-option span{display:flex;min-height:46px;align-items:center;justify-content:center;padding:9px 7px;border:1px solid #b9c5ca;background:#f9fbfc;color:#485a63;font-size:12px;text-align:center;cursor:pointer;transition:.15s;line-height:1.45}.choice-option span:hover{border-color:#708b99;background:#f2f6f8}.choice-option input:checked+span{border-color:var(--navy);background:#dfe9ee;color:#253f4e;box-shadow:inset 0 0 0 1px #304d6033;font-weight:bold}
+.implemented-title{margin:27px 0 12px;font-size:13px;color:#526a76;letter-spacing:.13em;border-left:3px solid #5f7d8d;padding-left:9px}
+.master-card{padding:18px 19px;border:1px solid #afc0c8;border-top:3px solid #607f90;background:#f8fbfc;position:relative}.master-card:after{content:"OBSERVED";position:absolute;right:10px;bottom:7px;font:9px/1 Arial,sans-serif;letter-spacing:.14em;color:#92a4ad}.master-card .placeholder-name{margin-bottom:7px}.master-value{font-size:23px;font-weight:bold;letter-spacing:.1em;color:#294858}.master-catch{font-size:12px;color:#5d737e;line-height:1.8;margin-top:6px}.master-detail{text-align:right;margin-top:10px}.master-detail a{font-size:11px;color:#345e75;text-decoration:none;border-bottom:1px solid #345e7560;padding-bottom:2px}
+.value-section{margin-top:26px}.value-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.value-card{border:1px solid #aebfc7;border-top:3px solid #405f70;background:linear-gradient(180deg,#f7fafb,#edf3f5);padding:24px 24px 22px;position:relative}.value-card:after{content:"OBSERVATION VALUE";position:absolute;right:11px;bottom:8px;font:9px/1 Arial,sans-serif;letter-spacing:.13em;color:#94a5ad}.value-head{display:flex;align-items:flex-end;justify-content:space-between;gap:14px}.value-label{font-size:21px;font-weight:bold;color:#405762;letter-spacing:.12em}.value-number{font-size:46px;line-height:1;font-weight:bold;letter-spacing:.06em;color:#274858}.value-number small{font-size:12px;color:#70838c;letter-spacing:.08em;margin-left:4px}.value-band{font-size:15px;font-weight:bold;color:#3c5a69;margin-top:10px;letter-spacing:.08em}.value-bar{height:13px;border:1px solid #a8b8c0;background:#e0e8ec;margin-top:14px;overflow:hidden}.value-fill{height:100%;width:0;background:linear-gradient(90deg,#7895a4,#304d60);transition:width .45s ease}.value-desc{font-size:12px;line-height:1.9;color:#5d717b;margin-top:12px}.value-note{margin-top:12px;padding:10px 12px;background:#e9f0f3;border-left:3px solid #6c8592;font-size:10px;line-height:1.8;color:#5f727b}.emotion-note{margin-top:13px;padding-left:10px;border-left:2px solid #8c7a89;font-size:11px;line-height:1.8;color:#657983}.emotion-note strong{color:#526975}.value-warning{display:none;margin-top:14px;padding:13px 15px;border:1px solid #b5aeb4;border-left:4px solid #786b76;background:#f1eef1;color:#625a61;font-size:11px;line-height:1.9}.value-warning strong{color:#51464f}.value-detail{text-align:right;margin-top:10px}.value-detail a{font-size:11px;color:#345e75;text-decoration:none;border-bottom:1px solid #345e7560;padding-bottom:2px}.region-summary{margin-top:15px;padding:16px 18px;border:1px solid #b8c3c8;background:#f8fafb;display:grid;grid-template-columns:minmax(0,1fr) 178px;align-items:center;gap:20px}.region-summary-label{font-size:10px;letter-spacing:.13em;color:#71838c}.region-summary-value{font-size:18px;font-weight:bold;letter-spacing:.12em;color:#405762;margin-top:3px}.region-summary-desc{font-size:11px;line-height:1.85;color:#647881;margin-top:8px}.region-summary a{display:inline-block;margin-top:9px;font-size:10px;color:#345e75;text-decoration:none;border-bottom:1px solid #345e7555}.mini-region-wrap{width:178px}.mini-y-label{font-size:9px;color:#81929a;text-align:center}.mini-y-high{margin-bottom:4px}.mini-y-low{margin-top:4px}.mini-x-labels{display:flex;justify-content:space-between;gap:8px;font-size:9px;color:#81929a;margin-top:4px}.mini-x-labels span:last-child{text-align:right}.mini-region-map{position:relative;width:150px;aspect-ratio:1/1;margin:0 auto;border:1px solid #aab8be;background:#fbfcfd;overflow:hidden}.mini-region-map:before,.mini-region-map:after{content:"";position:absolute;background:#b6c1c6}.mini-region-map:before{left:50%;top:0;width:1px;height:100%}.mini-region-map:after{left:0;top:50%;width:100%;height:1px}.mini-quad{position:absolute;font:9px/1 Arial,sans-serif;color:#82939b}.mini-q3{left:8px;top:8px}.mini-q4{right:8px;top:8px}.mini-q1{left:8px;bottom:8px}.mini-q2{right:8px;bottom:8px}.mini-region-point{display:none;position:absolute;width:11px;height:11px;border-radius:50%;background:#405f70;border:2px solid #fff;box-shadow:0 0 0 1px #405f70;transform:translate(-50%,50%);z-index:3}
+.future-inputs{margin-top:24px;padding:16px 18px;border:1px dashed #aebcc3;background:#eef3f5;color:#687982;font-size:12px;line-height:1.9}
+.future-inputs b{color:#455861}
+.actions{text-align:center}
+button{margin-top:24px;padding:13px 36px;border:1px solid #263f4f;background:var(--navy);color:#fff;font-family:inherit;letter-spacing:.16em;cursor:pointer;box-shadow:0 3px 8px #0001}
+button:hover{filter:brightness(1.08)}
+#error{color:#8a3f46;font-size:12px;margin-top:10px;min-height:18px;text-align:center}
+.note{font-size:11px;color:#71828a;margin-top:12px;line-height:1.8;text-align:center}
+.precheck-link{margin-top:22px;padding:17px 18px;border:2px solid #b7aeb8;border-left:7px solid #786b76;background:linear-gradient(135deg,#f8f6f8,#efebef);box-shadow:0 4px 14px #55465312}.precheck-link strong{display:block;color:#625360;font-size:15px;letter-spacing:.08em;margin-bottom:6px}.precheck-link span{display:block;color:#70636e;font-size:11px;line-height:1.8;margin-bottom:10px}.precheck-link a{display:inline-block;padding:10px 16px;border:1px solid #958793;background:#fbf9fb;color:#655763;text-decoration:none;font-size:12px;font-weight:bold;letter-spacing:.05em}
+.faq-nav{margin-top:10px;text-align:right}.faq-nav a{display:inline-block;padding:8px 12px;border:1px solid #aebdc4;background:#f5f8f9;color:#456675;text-decoration:none;font-size:11px;font-weight:bold;letter-spacing:.03em}.material-note{margin-top:8px;font-size:10px;line-height:1.8;color:#70828b}.material-note a{color:#345e75;text-decoration:none;border-bottom:1px solid #345e7555}
+.position-block{grid-column:1/-1;margin-top:18px;padding-top:18px;border-top:1px solid var(--line2)}.position-head{font-size:13px;font-weight:bold;color:#43545d;margin-bottom:8px}.position-note{font-size:10px;line-height:1.75;color:#75868e;margin-bottom:12px}.position-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.position-question{padding:0;background:transparent}.position-question strong{display:block;font-size:12px;color:#4b5f68;margin-bottom:8px}.binary-options{display:grid;grid-template-columns:1fr 1fr;gap:7px}.binary-option{position:relative}.binary-option input{position:absolute;opacity:0;pointer-events:none}.binary-option span{display:block;padding:9px 7px;border:1px solid #b9c5ca;background:#f9fbfc;color:#485a63;font-size:12px;text-align:center;cursor:pointer}.binary-option input:checked+span{border-color:var(--navy);background:#dfe9ee;color:#253f4e;box-shadow:inset 0 0 0 1px #304d6033;font-weight:bold}
+.hidden-observation{margin-top:28px;border:1px solid #aebdc4;background:#eef3f5;padding:20px 21px}.hidden-observation h3{font-size:15px;letter-spacing:.11em;margin:0 0 9px;color:#3d5663}.hidden-observation p{font-size:12px;line-height:1.9;color:#62757e;margin:0}.hidden-observation .private-recommend{margin-top:8px;font-weight:bold;color:#455b66}.reveal-btn{margin-top:16px;padding:11px 24px;font-size:12px}.fluctuation-result{display:none;margin-top:14px;padding:22px 22px 20px;border:1px solid #aab9c0;border-top:4px solid #405f70;background:linear-gradient(180deg,#f7fafb,#edf3f5)}.fluctuation-top{display:flex;justify-content:space-between;align-items:flex-end;gap:15px}.fluctuation-label{font-size:19px;font-weight:bold;letter-spacing:.11em;color:#405762}.fluctuation-number{font-size:44px;line-height:1;font-weight:bold;color:#274858}.fluctuation-number small{font-size:12px;color:#70838c;margin-left:4px}.fluctuation-band{font-size:15px;font-weight:bold;color:#3c5a69;margin-top:10px;letter-spacing:.08em}.fluctuation-desc{font-size:12px;line-height:2;color:#5d717b;margin-top:13px}.fluctuation-caution{margin-top:13px;padding:11px 13px;border-left:3px solid #6c8592;background:#e8eff2;font-size:11px;line-height:1.9;color:#586d77}.special-note{display:none;margin-top:15px;padding:13px 15px;border:1px solid #b9c2c6;background:#f7f9f9;font-size:11px;line-height:1.9;color:#566a74}.special-note strong{display:block;margin-bottom:4px;color:#405762;letter-spacing:.08em}.extra-exam{margin-top:17px;padding:14px 15px;font-size:11px;line-height:1.9}.extra-exam strong{display:block;margin-bottom:4px}.extra-exam.normal{border:1px solid #b9cbd3;border-left:5px solid #557b8e;background:#eaf2f5;color:#58707c}.extra-exam.normal strong{color:#355c70}.extra-exam.extreme{border:1px solid #c9aeb2;border-left:5px solid #8b5058;background:#f8ecee;color:#6b5559}.extra-exam.extreme strong{color:#78434b}
+.result-actions{display:none;margin-top:22px;padding:18px 16px;border:1px solid #c2cfd4;background:#f2f6f7;text-align:center}.result-actions-title{font-size:12px;font-weight:bold;color:#4a626e;letter-spacing:.08em;margin-bottom:10px}.result-action-buttons{display:flex;flex-wrap:wrap;justify-content:center;gap:9px}.result-action-buttons button{margin:0;padding:11px 16px;font-size:11px;letter-spacing:.06em}.result-action-buttons .secondary{background:#f9fbfc;color:#385769;border-color:#7b95a2}.result-action-note{font-size:11px;color:#6f838d;line-height:1.85;margin-top:12px}.result-action-note strong{color:#526975;font-weight:bold}
+.export-modal{display:none;position:fixed;inset:0;z-index:1000;background:#20323c99;padding:22px;overflow:auto}.export-modal.open{display:flex;align-items:center;justify-content:center}.export-dialog{width:min(760px,96vw);max-height:94vh;overflow:auto;background:#f8fbfc;border:1px solid #9fb0b8;border-top:5px solid #405f70;box-shadow:0 18px 60px #1e2e3644;padding:20px}.export-dialog h3{margin:0 0 8px;font-size:17px;color:#334f5d}.export-dialog p{margin:0 0 13px;font-size:12px;line-height:1.85;color:#647983}.export-preview{display:block;max-width:100%;max-height:62vh;margin:0 auto 14px;border:1px solid #c0cdd2;background:#fff}.export-buttons{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}.export-buttons button,.export-buttons a{display:inline-flex;align-items:center;justify-content:center;min-width:148px;padding:10px 14px;border:1px solid #6f8996;background:#405f70;color:#fff;text-decoration:none;font:11px/1.2 inherit;cursor:pointer}.export-buttons .secondary{background:#f9fbfc;color:#385769}.export-help{margin-top:12px;padding:10px 12px;border-left:3px solid #8c7a89;background:#f4f1f3;font-size:11px;line-height:1.8;color:#665d64}.export-close{float:right;border:0!important;background:transparent!important;color:#607681!important;font-size:20px!important;padding:0 2px!important}
+
+#result{display:none;scroll-margin-top:20px}
+.result-head{position:relative;padding:30px 30px 27px;text-align:center;background:linear-gradient(180deg,#e8eff2,#f4f7f8);border-bottom:1px solid var(--line2)}
+.result-head:before{content:"顕現個体観測記録";display:block;font:10px/1.4 Arial,sans-serif;letter-spacing:.22em;color:var(--blue);margin-bottom:10px}
+.subject{font-size:13px;color:#667982;margin-bottom:4px}.subject strong{font-size:18px;color:#2a3e49}
+.number-badge{display:inline-block;margin-top:15px;padding:5px 13px;border-block:1px solid #8fa2ac;color:#506b79;font-size:12px;letter-spacing:.13em}
+.type{font-size:32px;font-weight:bold;margin:12px 0 7px;letter-spacing:.13em;color:#233c4a}
+.type-catch{font-size:14px;color:#4d6571;line-height:1.8}
+.content{padding:28px 34px 34px}
+.observation{padding:19px 21px;border:1px solid var(--line2);border-left:4px solid var(--blue);background:#fbfdfd;font-size:13px;line-height:2}
+.observation-label{font:10px/1.4 Arial,sans-serif;letter-spacing:.15em;color:#718894;margin-bottom:6px}
+.detail-link-wrap{text-align:right;margin-top:11px}.detail-link{font-size:12px;color:#345e75;text-decoration:none;border-bottom:1px solid #345e7560;padding-bottom:2px}
+.future-title{margin:27px 0 12px;font-size:13px;color:#526a76;letter-spacing:.13em;border-left:3px solid #91a4ae;padding-left:9px}
+.result-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.placeholder{min-height:112px;padding:16px 17px;border:1px solid #c5d0d5;background:#f1f5f6;position:relative;overflow:hidden}
+.placeholder:after{content:"PENDING";position:absolute;right:9px;bottom:6px;font:9px/1 Arial,sans-serif;letter-spacing:.14em;color:#a2b0b6}
+.placeholder-name{font-size:13px;font-weight:bold;color:#50636c;margin-bottom:12px}.placeholder-value{color:#92a0a6;font-size:18px;letter-spacing:.13em}.placeholder-note{font-size:10px;color:#8a9aa1;margin-top:7px}
+.meta-row{margin-top:18px;padding:12px 14px;background:#e9f0f3;border:1px solid #c8d3d8;color:#667983;font-size:11px;line-height:1.8}
+.disclaimer{padding:21px 24px;font-size:12px;color:#677982;background:#f4f7f8;border:1px solid var(--line);box-shadow:0 7px 20px #24333b0f;line-height:1.95}
+.disclaimer strong{color:#40545e}.footer{text-align:center;color:#7b8b92;font-size:10px;letter-spacing:.11em;margin-top:18px}
+
+@media(max-width:720px){.position-grid{grid-template-columns:1fr;gap:16px}.wrap{margin:18px auto 58px}.result-action-note{font-size:11px}.export-dialog{padding:16px}.export-preview{max-height:58vh}.region-summary{grid-template-columns:1fr}.mini-region-wrap{width:150px;margin:4px auto 0}.mini-region-map{width:140px}.header{padding:31px 17px}h1{font-size:23px}.input-panel,.content{padding:21px 17px}.form-grid,.result-grid,.value-grid{grid-template-columns:1fr}.weather-options{grid-template-columns:repeat(2,1fr)}.time-options{grid-template-columns:repeat(2,1fr)}.choice-options{grid-template-columns:repeat(2,1fr)}.choice-option:last-child:nth-child(odd){grid-column:1/-1}.type{font-size:25px}.date-field{max-width:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="https://milk-tools.com/">← みるくの診断・ツール置き場へ</a>
+  <header class="header">
+    <div class="seal">個体<br>観測</div>
+    <div class="kicker">非公式・本丸個体解釈ツール</div>
+    <h1>刀剣男士個体観測</h1>
+    <p class="sub">あなたの本丸に顕現した一振りについて、顕現時の記録と本丸で観測された現在の姿から「顕現特性」「対主傾向」「対刀傾向」、情緒・神性の観測値、追加観測項目を診断します。公式の設定・見解とは一切関係ありません。診断結果は、二次創作や想像を広げるきっかけのひとつとしてお楽しみください。</p>
+    <span class="unofficial">UNOFFICIAL FAN-MADE / ver.1.0</span>
+    <div class="precheck-link"><strong>観測を始める前に、必ずお読みください</strong><span>本診断は刀剣男士についての解釈に細かく触れる内容を含みます。注意事項と観測方法をご確認のうえ、ご利用ください。</span><a href="before_check.html">「観測の前に」を確認する →</a></div>
+    <div class="faq-nav"><a href="faq.html">よくある質問・補足を見る →</a></div>
+  </header>
+
+  <section class="panel input-panel">
+    <div class="section-code">FILE 01 / MANIFESTATION DATA</div>
+    <h2>顕現個体情報</h2>
+    <p class="lead">刀剣名、普段の呼び名と顕現記録、本丸での様子を入力してください。「顕現特性」「対主傾向」「対刀傾向」と「情緒」「神性」を観測し、最後に追加観測項目を表示します。</p>
+    <div class="form-grid">
+      <div class="field full">
+        <label for="formalName">刀剣名</label>
+        <input id="formalName" type="text" maxlength="40" placeholder="例：和泉守兼定">
+        <div class="field-note">診断結果・保存画像・シェア文に表示する名前です。</div>
+      </div>
+      <div class="field">
+        <label for="name">普段の呼び名</label>
+        <input id="name" type="text" maxlength="40" placeholder="例：兼さん">
+        <div class="field-note">普段の呼び名は観測情報として使用され、結果画面には表示されません。</div>
+      </div>
+      <div class="field">
+        <label for="kana">普段の呼び名のふりがな</label>
+        <input id="kana" type="text" maxlength="60" placeholder="例：かねさん" inputmode="text">
+        <div class="field-note">ひらがなのみで入力してください。</div>
+      </div>
+      <div class="field full date-field">
+        <label>顕現日</label>
+        <div class="date-parts" aria-label="顕現日">
+          <div class="date-part"><input id="manifestYear" type="text" inputmode="numeric" maxlength="4" placeholder="2015" aria-label="顕現年"><span class="date-unit">年</span></div>
+          <div class="date-part"><input id="manifestMonth" type="text" inputmode="numeric" maxlength="2" placeholder="1" aria-label="顕現月"><span class="date-unit">月</span></div>
+          <div class="date-part"><input id="manifestDay" type="text" inputmode="numeric" maxlength="2" placeholder="14" aria-label="顕現日"><span class="date-unit">日</span></div>
+        </div>
+        <div class="field-note">実際にゲーム内で顕現した日でも、あなたの創作内で設定した顕現日でも構いません。</div>
+      </div>
+      <div class="time-block">
+        <div class="weather-label">顕現時間帯</div>
+        <div class="time-options" id="timeOptions">
+          <label class="time-option"><input type="radio" name="timeband" value="dawn" data-code="0"><span>夜明け</span></label>
+          <label class="time-option"><input type="radio" name="timeband" value="morning" data-code="1"><span>朝</span></label>
+          <label class="time-option"><input type="radio" name="timeband" value="day" data-code="2"><span>昼</span></label>
+          <label class="time-option"><input type="radio" name="timeband" value="dusk" data-code="3"><span>夕暮れ</span></label>
+          <label class="time-option"><input type="radio" name="timeband" value="evening" data-code="4"><span>宵</span></label>
+          <label class="time-option"><input type="radio" name="timeband" value="unknown"><span>分からない</span></label>
+        </div>
+        <div class="field-note">実際に顕現した時間帯でも、あなたの創作内で設定した時間帯でも構いません。分からない場合は、顕現記録をもとに補完して判定します。</div>
+      </div>
+      <div class="weather-block">
+        <div class="weather-label">事前提出資料</div>
+        <div class="weather-options" id="materialOptions">
+          <label class="weather-option"><input type="radio" name="material" value="none" data-code="2"><span>資料なし</span></label>
+          <label class="weather-option"><input type="radio" name="material" value="personal" data-code="4"><span>私物</span></label>
+          <label class="weather-option"><input type="radio" name="material" value="battlewear" data-code="1"><span>装束（戦闘）</span></label>
+          <label class="weather-option"><input type="radio" name="material" value="dutywear" data-code="7"><span>装束（内番）</span></label>
+          <label class="weather-option"><input type="radio" name="material" value="accessory" data-code="8"><span>装身具</span></label>
+          <label class="weather-option"><input type="radio" name="material" value="treasure" data-code="5"><span>宝物</span></label>
+          <label class="weather-option"><input type="radio" name="material" value="observation" data-code="3"><span>観測札</span></label>
+          <label class="weather-option"><input type="radio" name="material" value="precision" data-code="6"><span>精密観測札</span></label>
+        </div>
+        <div class="material-note">追加資料の提出は任意です。資料を提出しない場合でも、観測を行うことができます。詳しくは<a href="before_check.html#materials">「観測の前に」</a>をご確認ください。</div>
+      </div>
+
+      <div class="position-block">
+        <div class="position-head">本丸での位置づけ</div>
+        <div class="position-grid">
+          <div class="position-question"><strong>この刀剣男士は初期刀ですか？</strong><div class="binary-options">
+            <label class="binary-option"><input type="radio" name="starter" value="yes"><span>はい</span></label>
+            <label class="binary-option"><input type="radio" name="starter" value="no"><span>いいえ</span></label>
+          </div></div>
+          <div class="position-question"><strong>現在の近侍ですか？</strong><div class="binary-options">
+            <label class="binary-option"><input type="radio" name="attendant" value="yes"><span>はい</span></label>
+            <label class="binary-option"><input type="radio" name="attendant" value="no"><span>いいえ</span></label>
+          </div></div>
+        </div>
+      </div>
+
+      <div class="observed-block">
+        <div class="observed-head">
+          <div class="section-code">FILE 02 / CURRENT OBSERVATION</div>
+          <h3>審神者から見た現在の印象</h3>
+          <p>ここでは一般的なイメージではなく、現在あなたの本丸にいる、その一振りについて最も近いものを選択してください。「分からない」も観測結果のひとつとして判定に使用します。</p>
+        </div>
+
+        <div class="question">
+          <div class="question-label">食事について <span class="question-hint">最も近い印象を1つ</span></div>
+          <div class="choice-options">
+            <label class="choice-option"><input type="radio" name="food" value="love"><span>大好き</span></label>
+            <label class="choice-option"><input type="radio" name="food" value="like"><span>好き</span></label>
+            <label class="choice-option"><input type="radio" name="food" value="normal"><span>普通</span></label>
+            <label class="choice-option"><input type="radio" name="food" value="weak"><span>苦手</span></label>
+            <label class="choice-option"><input type="radio" name="food" value="hate"><span>嫌い</span></label>
+            <label class="choice-option"><input type="radio" name="food" value="rare"><span>ほとんどしない</span></label>
+            <label class="choice-option"><input type="radio" name="food" value="indifferent"><span>無関心</span></label>
+            <label class="choice-option"><input type="radio" name="food" value="particular"><span>こだわりがある</span></label>
+            <label class="choice-option"><input type="radio" name="food" value="cook"><span>料理もする</span></label>
+            <label class="choice-option"><input type="radio" name="food" value="unknown"><span>分からない</span></label>
+          </div>
+        </div>
+
+        <div class="question">
+          <div class="question-label">戦いについて <span class="question-hint">最も近い印象を1つ</span></div>
+          <div class="choice-options">
+            <label class="choice-option"><input type="radio" name="battle" value="purpose"><span>生き甲斐</span></label>
+            <label class="choice-option"><input type="radio" name="battle" value="love"><span>大好き</span></label>
+            <label class="choice-option"><input type="radio" name="battle" value="like"><span>好き</span></label>
+            <label class="choice-option"><input type="radio" name="battle" value="good"><span>得意</span></label>
+            <label class="choice-option"><input type="radio" name="battle" value="normal"><span>普通</span></label>
+            <label class="choice-option"><input type="radio" name="battle" value="weak"><span>苦手</span></label>
+            <label class="choice-option"><input type="radio" name="battle" value="hate"><span>嫌い</span></label>
+            <label class="choice-option"><input type="radio" name="battle" value="avoid"><span>避けている</span></label>
+            <label class="choice-option"><input type="radio" name="battle" value="indifferent"><span>無関心</span></label>
+            <label class="choice-option"><input type="radio" name="battle" value="unknown"><span>分からない</span></label>
+          </div>
+        </div>
+
+        <div class="question">
+          <div class="question-label">遊びについて <span class="question-hint">最も近い印象を1つ</span></div>
+          <div class="choice-options">
+            <label class="choice-option"><input type="radio" name="play" value="love"><span>大好き</span></label>
+            <label class="choice-option"><input type="radio" name="play" value="like"><span>好き</span></label>
+            <label class="choice-option"><input type="radio" name="play" value="good"><span>得意</span></label>
+            <label class="choice-option"><input type="radio" name="play" value="normal"><span>普通</span></label>
+            <label class="choice-option"><input type="radio" name="play" value="weak"><span>苦手</span></label>
+            <label class="choice-option"><input type="radio" name="play" value="hate"><span>嫌い</span></label>
+            <label class="choice-option"><input type="radio" name="play" value="watch"><span>見守る</span></label>
+            <label class="choice-option"><input type="radio" name="play" value="solo"><span>ひとり遊びが好き</span></label>
+            <label class="choice-option"><input type="radio" name="play" value="indifferent"><span>無関心</span></label>
+            <label class="choice-option"><input type="radio" name="play" value="unknown"><span>分からない</span></label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions"><button type="button" onclick="diagnose()">観測を開始する</button></div>
+    <div id="error"></div>
+  </section>
+
+  <section id="result" class="panel">
+    <div class="result-head">
+      <div class="subject">観測対象：<strong id="resultName">—</strong></div>
+      <div id="manifestNumber" class="number-badge">顕現特性 No. —</div>
+      <div id="traitName" class="type">—</div>
+      <div id="traitCatch" class="type-catch">—</div>
+    </div>
+    <div class="content">
+      <div class="observation">
+        <div class="observation-label">OBSERVATION SUMMARY</div>
+        <div id="traitText">—</div>
+        <div class="detail-link-wrap"><a id="traitDetailLink" class="detail-link" href="manifestation_traits.html">顕現特性の詳細解説を見る →</a></div>
+      </div>
+
+      <div class="implemented-title">追加観測結果</div>
+      <div class="result-grid">
+        <div class="master-card">
+          <div class="placeholder-name">対主傾向</div>
+          <div id="masterValue" class="master-value">—</div>
+          <div id="masterCatch" class="master-catch">—</div>
+          <div class="master-detail"><a id="masterDetailLink" href="master_tendencies.html">対主傾向の詳細解説を見る →</a></div>
+        </div>
+        <div class="master-card">
+          <div class="placeholder-name">対刀傾向</div>
+          <div id="swordValue" class="master-value">—</div>
+          <div id="swordCatch" class="master-catch">—</div>
+          <div class="master-detail"><a id="swordDetailLink" href="sword_tendencies.html">対刀傾向の詳細解説を見る →</a></div>
+        </div>
+      </div>
+
+      <div class="implemented-title value-section">個体観測値</div>
+      <div class="value-grid">
+        <div class="value-card">
+          <div class="value-head">
+            <div class="value-label">情緒</div>
+            <div id="emotionValue" class="value-number">—<small>/ 100</small></div>
+          </div>
+          <div id="emotionBand" class="value-band">—</div>
+          <div class="value-bar" aria-hidden="true"><div id="emotionFill" class="value-fill"></div></div>
+          <div id="emotionDesc" class="value-desc">—</div>
+          <div class="emotion-note">※情緒は、<strong>感情の強さ・豊かさ</strong>を示す値ではありません。</div>
+        </div>
+        <div class="value-card">
+          <div class="value-head">
+            <div class="value-label">神性</div>
+            <div id="divinityValue" class="value-number">—<small>/ 100</small></div>
+          </div>
+          <div id="divinityBand" class="value-band">—</div>
+          <div class="value-bar" aria-hidden="true"><div id="divinityFill" class="value-fill"></div></div>
+          <div id="divinityDesc" class="value-desc">—</div>
+          <div id="divinityWarning" class="value-warning"><strong>観測上の注意</strong><br>神性値が通常の観測範囲を大きく上回っています。当該個体を人間的な行動様式のみから理解することは推奨されません。言動・感情表現が平常であっても、その認識・価値基準が人と同一であるとは限りません。</div>
+          <div class="value-detail"><a id="divinityDetailLink" href="divinity.html">神性値の詳細解説を見る →</a></div>
+        </div>
+      </div>
+      <div class="region-summary" id="regionSummary">
+        <div>
+          <div class="region-summary-label">EMOTION × DIVINITY / OBSERVATION REGION</div>
+          <div id="regionValue" class="region-summary-value">観測領域 —</div>
+          <div id="regionDesc" class="region-summary-desc">—</div>
+          <div id="specialNote" class="special-note"><strong>特記事項</strong><span id="specialNoteText"></span></div>
+          <a id="regionDetailLink" href="emotion_divinity.html">情緒・神性と観測領域について詳しく見る →</a>
+        </div>
+        <div class="mini-region-wrap" aria-label="情緒値と神性値の観測位置">
+          <div class="mini-y-label mini-y-high">神性値：高</div>
+          <div class="mini-region-map">
+            <span class="mini-quad mini-q3">Ⅲ</span><span class="mini-quad mini-q4">Ⅳ</span>
+            <span class="mini-quad mini-q1">Ⅰ</span><span class="mini-quad mini-q2">Ⅱ</span>
+            <span id="miniRegionPoint" class="mini-region-point"></span>
+          </div>
+          <div class="mini-y-label mini-y-low">神性値：低</div>
+          <div class="mini-x-labels"><span>情緒値：低</span><span>情緒値：高</span></div>
+        </div>
+      </div>
+
+      <div class="hidden-observation" id="hiddenObservation">
+        <h3>追加観測項目</h3>
+        <p>以下の項目には、対象個体の存在の揺らぎに関する観測情報が含まれます。</p>
+        <p class="private-recommend">対象となる刀剣男士がいない場所で確認することを推奨します。</p>
+        <button type="button" class="reveal-btn" id="revealFluctuation" onclick="revealFluctuationResult()">観測結果を確認する</button>
+        <div class="fluctuation-result" id="fluctuationResult">
+          <div class="fluctuation-top">
+            <div class="fluctuation-label">存在の揺らぎ</div>
+            <div id="fluctuationValue" class="fluctuation-number">—<small>/ 100</small></div>
+          </div>
+          <div id="fluctuationBand" class="fluctuation-band">—</div>
+          <div class="value-bar" aria-hidden="true"><div id="fluctuationFill" class="value-fill"></div></div>
+          <div id="fluctuationDesc" class="fluctuation-desc">—</div>
+          <div class="value-detail"><a href="fluctuation.html">存在の揺らぎの詳細解説を見る →</a></div>
+          <div class="extra-exam normal" id="extraExamBox"><strong id="extraExamTitle">追加審査について</strong><span id="extraExamText">より詳細な個体観測を希望する場合は、追加審査を任意で受けることができます。</span><br>申し込み方法については後日案内を行います。</div>
+        </div>
+      </div>
+      <div id="metaRow" class="meta-row">—</div>
+      <div class="result-actions" id="resultActions">
+        <div class="result-actions-title">観測記録を保存・共有</div>
+        <div class="result-action-buttons">
+          <button type="button" onclick="saveResultImage()">結果画像を保存</button>
+          <button type="button" class="secondary" onclick="saveDetailedRecord()">詳細記録を保存</button>
+          <button type="button" class="secondary" onclick="shareResult()">Xで結果をシェア</button>
+        </div>
+        <div class="result-action-note">投稿用の結果画像・シェア文には「刀剣名」を使用します。詳細記録には入力した観測情報をすべて保存します。<br><strong>詳細記録には、対象となる刀剣男士および本丸内の詳細な情報が含まれます。公開・共有の際は、取り扱いにご注意ください。</strong></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="disclaimer">
+    <strong>ご利用にあたって</strong><br>
+    この診断は『刀剣乱舞ONLINE』を題材にした非公式のファンメイド・二次創作補助ツールです。公式の設定・見解とは一切関係ありません。診断結果は、二次創作や想像を広げるきっかけのひとつとしてお楽しみください。<br>
+    また、「情緒」「神性」「存在の揺らぎ」を含む各分類・観測値は、刀剣男士の強さや優劣を示すものではありません。
+  </section>
+  <div class="footer">INDIVIDUAL MANIFESTATION OBSERVATION / ver.1.0</div>
+</div>
+
+<script>
+const TRAITS={
+  1:{displayNo:1,name:'独立顕現',catch:'自己の輪郭が明瞭な一振り',text:'顕現直後から「自分」という存在の輪郭を比較的はっきりと保つ個体です。周囲の影響を受けないという意味ではなく、変化や経験を取り込みながらも、自身の核へ戻りやすい傾向があります。'},
+  2:{displayNo:2,name:'呼応顕現',catch:'周囲との関わりを取り込みながら安定する一振り',text:'周囲の存在や環境との関係によって顕現状態が整いやすい個体です。本丸の空気、審神者、ほかの刀剣男士など、自分以外の存在との関係を穏やかに取り込みます。これは主体性の弱さを示すものではありません。'},
+  3:{displayNo:3,name:'発露顕現',catch:'内なる性質が外へ現れやすい一振り',text:'内在する霊的性質が外部から観測されやすい顕現形式です。言葉数や感情表現の多さとは別に、その個体がそこにいることで場に独自の色や存在感が生まれやすい傾向があります。'},
+  4:{displayNo:4,name:'定着顕現',catch:'現世に深く根を下ろす一振り',text:'現世への定着性が高く、顕現状態の変動が比較的少ない個体です。外部環境が変化しても存在の基盤そのものが揺らぎにくく、長期的な顕現維持において安定した傾向を示します。'},
+  5:{displayNo:5,name:'流転顕現',catch:'変化することによって自己を保つ一振り',text:'顕現後の経験や環境を取り込み、自身の在り方を柔軟に更新していく個体です。変化以前の性質を失うのではなく、積み重ねた経験そのものを自己の一部として抱えていく傾向があります。'},
+  6:{displayNo:6,name:'調律顕現',catch:'自身と周囲の均衡を整える一振り',text:'自身と周辺環境との霊的なずれを調整し、双方が安定する状態へ近づきやすい顕現形式です。環境へ一方的に同化するのではなく、自分を保ったまま馴染んでいく傾向があります。'},
+  7:{displayNo:7,name:'深層顕現',catch:'観測できる姿の奥に、深い領域を持つ一振り',text:'表層的な言動や日常の振る舞いからは確認しきれない霊的性質を、内部に保持する個体です。普段見せる姿も確かに本人ですが、外部観測だけからその全容を把握することは難しい傾向があります。'},
+  8:{displayNo:8,name:'実存顕現',catch:'現世における存在の実在性が強い一振り',text:'霊的存在でありながら、現世側へ非常にはっきりと自己を成立させる顕現形式です。物質的・現実的な環境との結びつきを形成しやすく、その存在は現世側から比較的明瞭に観測されます。'},
+  9:{displayNo:9,name:'円環顕現',catch:'異なる性質を一つの自己として内包する一振り',text:'刀としての自己、人の姿を得た自己、過去と現在など、複数の異なる側面を一つの個体の中に保持しやすい顕現形式です。状況ごとに異なる面が現れても、それらを矛盾として切り離さず自己の一部として成立させます。'},
+  11:{displayNo:10,name:'感応顕現',catch:'通常より多くのものを受け取る一振り',text:'周囲に存在する霊的情報への感応性が高い特殊顕現形式です。場所・物・他の霊的存在など、通常個体では明瞭に認識されない変化を捉える場合があります。感応対象や受け取り方には大きな個体差があります。'},
+  22:{displayNo:11,name:'領域顕現',catch:'自身の周囲に、その一振りの「場」を形成する',text:'自身が長く存在する場所に、個体の霊的性質を反映した安定領域を形成しやすい特殊顕現形式です。本人の意思とは無関係に生じる場合もあり、長く過ごした場所ほど「その一振りの場所」として馴染んでいくことがあります。'},
+  33:{displayNo:12,name:'神秘顕現',catch:'既存の分類では説明しきれない影響を持つ一振り',text:'個としての輪郭を保ちながら、その存在が周囲へ説明しきれない形で影響を及ぼす特殊顕現形式です。影響は明確な現象として現れるとは限らず、「なぜかそうなる」「その一振りがいるときだけ何かが違う」といった形で観測されることもあります。'}
+};
+const MASTER_TYPES={
+  respect:{displayNo:1,name:'敬愛型',catch:'「主」としてのあなたを、強く意識する一振り。'},
+  trust:{displayNo:2,name:'相棒型',catch:'あなたに任せ、自分も任されることを好む一振り。'},
+  affection:{displayNo:3,name:'愛情型',catch:'「審神者」だけでなく、「あなた自身」を好ましく思う一振り。'},
+  protect:{displayNo:4,name:'保護型',catch:'あなたの無事を、自分のことのように気にかける一振り。'},
+  close:{displayNo:5,name:'懐剣型',catch:'何をするでもなく、あなたのそばにいることを好む一振り。'},
+  guide:{displayNo:6,name:'先導型',catch:'主を立てながら、ときにはあなたの進む先を示す一振り。'},
+  thoughtful:{displayNo:7,name:'思慮型',catch:'あなたをよく見て、あなたについてよく考える一振り。'},
+  independent:{displayNo:8,name:'自立型',catch:'近すぎず遠すぎず、自分の足であなたの隣に立つ一振り。'},
+  free:{displayNo:9,name:'自在型',catch:'主従という形を認めながらも、自分らしい方法であなたと付き合う一振り。'},
+  service:{displayNo:10,name:'奉仕型',catch:'「主のために何ができるか」を自然に考える一振り。'}
+};
+const FOOD_MASTER={love:'affection',like:'trust',normal:'respect',weak:'protect',hate:'close',rare:'independent',indifferent:'free',particular:'guide',cook:'service',unknown:'thoughtful'};
+const BATTLE_MASTER={purpose:'respect',love:'service',like:'trust',good:'guide',normal:'independent',weak:'affection',hate:'protect',avoid:'thoughtful',indifferent:'close',unknown:'free'};
+const PLAY_MASTER={love:'affection',like:'close',good:'free',normal:'trust',weak:'thoughtful',hate:'guide',watch:'protect',solo:'independent',indifferent:'service',unknown:'respect'};
+
+
+const SWORD_TYPES={
+  social:{displayNo:1,name:'親交型',catch:'多くの仲間と関わりながら、ひとつひとつの縁を育てる一振り。'},
+  ensemble:{displayNo:2,name:'協奏型',catch:'誰かと共に動くことで、自分らしい関係を築いていく一振り。'},
+  assist:{displayNo:3,name:'助力型',catch:'仲間に必要な手を、自然と差し伸べる一振り。'},
+  intimate:{displayNo:4,name:'懇意型',catch:'広く付き合うより、特に親しい相手との縁を深める一振り。'},
+  harmony:{displayNo:5,name:'融和型',catch:'異なる刀たちのあいだに、自然な馴染み方を生み出す一振り。'},
+  training:{displayNo:6,name:'研鑽型',catch:'仲間から刺激を受け、自分自身を磨いていく一振り。'},
+  observe:{displayNo:7,name:'観察型',catch:'まず相手を見て、その刀に合った距離を探す一振り。'},
+  autonomous:{displayNo:8,name:'自主型',catch:'仲間との縁を持ちながら、自分の歩幅も大切にする一振り。'},
+  freewheeling:{displayNo:9,name:'奔放型',catch:'決まった形にとらわれず、自分らしく仲間と付き合う一振り。'},
+  bond:{displayNo:10,name:'結束型',catch:'「同じ本丸の仲間」であることを、ひとつの大切な縁とする一振り。'}
+};
+
+// 対刀傾向：食事・戦い・遊びの各回答は、それぞれ10タイプへ一対一で対応する。
+const FOOD_SWORD={love:'social',like:'ensemble',normal:'harmony',weak:'training',hate:'observe',rare:'autonomous',indifferent:'freewheeling',particular:'bond',cook:'assist',unknown:'intimate'};
+const BATTLE_SWORD={purpose:'training',love:'bond',like:'assist',good:'ensemble',normal:'autonomous',weak:'social',hate:'harmony',avoid:'observe',indifferent:'intimate',unknown:'freewheeling'};
+const PLAY_SWORD={love:'social',like:'bond',good:'freewheeling',normal:'ensemble',weak:'training',hate:'intimate',watch:'assist',solo:'autonomous',indifferent:'harmony',unknown:'observe'};
+
+// 三観測が2点ずつに分かれた場合のみ、先に算出した対主傾向を補助観測として参照する。
+// 各順位には対刀10タイプが1回ずつ配置されている。
+const SWORD_RANKINGS={
+  respect:['bond','training','observe','harmony','assist','intimate','social','ensemble','autonomous','freewheeling'],
+  trust:['ensemble','freewheeling','intimate','autonomous','bond','social','harmony','observe','training','assist'],
+  affection:['social','ensemble','assist','bond','training','harmony','freewheeling','autonomous','observe','intimate'],
+  protect:['harmony','assist','social','training','freewheeling','autonomous','observe','bond','intimate','ensemble'],
+  close:['intimate','social','bond','assist','harmony','ensemble','autonomous','training','freewheeling','observe'],
+  guide:['autonomous','intimate','freewheeling','ensemble','observe','bond','assist','social','harmony','training'],
+  thoughtful:['observe','harmony','training','intimate','autonomous','freewheeling','ensemble','assist','bond','social'],
+  independent:['training','observe','autonomous','freewheeling','ensemble','assist','bond','intimate','social','harmony'],
+  free:['freewheeling','autonomous','ensemble','social','intimate','observe','training','harmony','assist','bond'],
+  service:['assist','bond','harmony','observe','social','training','intimate','freewheeling','ensemble','autonomous']
+};
+
+function calculateSwordTendency(masterKey,foodValue,battleValue,playValue){
+  const observed=[FOOD_SWORD[foodValue],BATTLE_SWORD[battleValue],PLAY_SWORD[playValue]];
+  const counts={}; observed.forEach(type=>counts[type]=(counts[type]||0)+2);
+  const strong=Object.entries(counts).find(([,score])=>score>=4);
+  if(strong) return {key:strong[0],observed,usedMasterTieBreak:false,scores:counts};
+  const ranking=SWORD_RANKINGS[masterKey];
+  const winner=ranking.find(type=>observed.includes(type));
+  return {key:winner,observed,usedMasterTieBreak:true,scores:counts,masterKey};
+}
+
+// ふりがなの初音10群ごとの呼称順位。三観測が2点ずつに分かれた場合だけ参照する。
+const NAME_RANKINGS={
+  a:['close','independent','respect','guide','thoughtful','free','trust','affection','service','protect'],
+  k:['close','trust','free','affection','guide','protect','service','independent','respect','thoughtful'],
+  s:['independent','close','protect','free','trust','thoughtful','service','guide','affection','respect'],
+  t:['affection','thoughtful','trust','guide','respect','close','protect','free','service','independent'],
+  n:['respect','guide','independent','affection','trust','protect','free','service','thoughtful','close'],
+  h:['free','protect','respect','thoughtful','trust','close','guide','independent','service','affection'],
+  m:['thoughtful','protect','affection','free','independent','guide','service','trust','close','respect'],
+  y:['service','affection','guide','free','close','thoughtful','independent','trust','respect','protect'],
+  r:['service','respect','trust','independent','thoughtful','free','guide','close','protect','affection'],
+  special:['service','protect','guide','trust','thoughtful','independent','respect','free','affection','close']
+};
+
+function kanaGroup(kana){
+  const c=[...kana][0];
+  if('あいうえおぁぃぅぇぉ'.includes(c)) return 'a';
+  if('かきくけこ'.includes(c)) return 'k';
+  if('さしすせそ'.includes(c)) return 's';
+  if('たちつてとっ'.includes(c)) return 't';
+  if('なにぬねの'.includes(c)) return 'n';
+  if('はひふへほ'.includes(c)) return 'h';
+  if('まみむめも'.includes(c)) return 'm';
+  if('やゆよゃゅょ'.includes(c)) return 'y';
+  if('らりるれろ'.includes(c)) return 'r';
+  if('わゐゑをんゎがぎぐげござじずぜぞだぢづでどばびぶべぼぱぴぷぺぽゔ'.includes(c)) return 'special';
+  return null;
+}
+function calculateMasterTendency(kana,foodValue,battleValue,playValue){
+  const observed=[FOOD_MASTER[foodValue],BATTLE_MASTER[battleValue],PLAY_MASTER[playValue]];
+  const counts={}; observed.forEach(type=>counts[type]=(counts[type]||0)+2);
+  const strong=Object.entries(counts).find(([,score])=>score>=4);
+  if(strong) return {key:strong[0],observed,usedNameTieBreak:false,scores:counts};
+  const group=kanaGroup(kana);
+  const ranking=NAME_RANKINGS[group];
+  const winner=ranking.find(type=>observed.includes(type));
+  return {key:winner,observed,usedNameTieBreak:true,scores:counts,group};
+}
+
+const EMOTION_BANDS=[
+  {min:0,max:19,name:'原型域',desc:'顕現時から備えていた性質が強く保たれ、同一の刀剣男士に共通する基礎的な情緒傾向が明瞭な状態です。',shortDesc:'顕現時から備えている性質が強く保たれ、その特徴が明瞭に表れています。'},
+  {min:20,max:39,name:'基底域',desc:'刀剣男士としての基礎的な情緒を中心に、顕現後の経験による個体差も現れ始めている状態です。',shortDesc:'刀剣男士としての基礎的な性質を軸に、顕現後の経験による個体差も現れ始めています。'},
+  {min:40,max:60,name:'形成域',desc:'顕現時からの性質と、本丸での経験によって形成された個体独自の情緒がともに観測される状態です。',shortDesc:'顕現時からの性質を保ちながら、本丸での経験による個体らしさが形成されています。'},
+  {min:61,max:80,name:'蓄積域',desc:'経験や関係性が情緒へ強く蓄積され、好悪・愛着・思い出などが現在の心のあり方へ反映されている状態です。',shortDesc:'本丸で重ねた経験や関係性が、現在の好みや反応へ強く反映されています。'},
+  {min:81,max:94,name:'深化域',desc:'個体独自の感情・価値観が深く形成され、同一の刀剣男士でも本丸ごとの個体差が明瞭になっている状態です。',shortDesc:'本丸での経験を重ね、その一振りならではの感情や価値観が深く形成されています。'},
+  {min:95,max:100,name:'高度個体化域',desc:'経験・記憶・関係性が複雑に積み重なり、顕現時の性質だけでは現在の心を推測しにくいほど個体化した状態です。',shortDesc:'経験・記憶・関係性が複雑に積み重なり、その一振り独自の心のあり方が強く確立されています。'}
+];
+
+// 情緒の日常補正。三項目はいずれも同じ10種類の補正値を1回ずつ使用する。
+const FOOD_EMOTION={love:10,like:7,cook:4,particular:2,normal:1,weak:-1,hate:-2,unknown:-4,rare:-7,indifferent:-10};
+const BATTLE_EMOTION={normal:10,weak:7,like:4,hate:2,good:1,love:-1,avoid:-2,unknown:-4,indifferent:-7,purpose:-10};
+const PLAY_EMOTION={love:10,like:7,good:4,watch:2,normal:1,solo:-1,weak:-2,unknown:-4,hate:-7,indifferent:-10};
+
+// 基礎情緒値は顕現日と呼び名から算出する。神性とは別系統の混合式を用いる。
+// 顕現日は先天的な土台、呼び名は顕現後の個体形成へ継続的に作用する要素として扱う。
+function mixEmotionSeed(year,month,day,kana){
+  const dateSerial=year*10000+month*100+day;
+  let seed=Math.imul(dateSerial,0x9e3779b1)>>>0;
+  const chars=[...kana];
+  chars.forEach((ch,i)=>{
+    const v=kanaNumericValue(ch);
+    seed^=Math.imul(v+(i+1)*131,0x85ebca6b);
+    seed=Math.imul(seed^(seed>>>13),0xc2b2ae35)>>>0;
+  });
+  seed^=Math.imul(chars.length+1,0x27d4eb2d);
+  seed^=seed>>>16;
+  seed=Math.imul(seed,0x7feb352d)>>>0;
+  seed^=seed>>>15;
+  seed=Math.imul(seed,0x846ca68b)>>>0;
+  seed^=seed>>>16;
+  return seed>>>0;
+}
+function calculateEmotion(year,month,day,kana,foodValue,battleValue,playValue){
+  const seed=mixEmotionSeed(year,month,day,kana);
+  const base=Math.floor((seed/4294967296)*101);
+  const adjustment=FOOD_EMOTION[foodValue]+BATTLE_EMOTION[battleValue]+PLAY_EMOTION[playValue];
+  const value=Math.max(0,Math.min(100,base+adjustment));
+  const band=EMOTION_BANDS.find(b=>value>=b.min&&value<=b.max);
+  return {value,base,adjustment,band};
+}
+
+const DIVINITY_BANDS=[
+  {min:0,max:19,name:'低顕現域',desc:'神性は個体内部に留まりやすく、日常的な言動や外部からの観測には現れにくい状態です。',shortDesc:'神霊的性質は内側に留まりやすく、日常では穏やかに表れています。'},
+  {min:20,max:39,name:'潜在域',desc:'神性の表出は比較的穏やかで、通常時には現世の存在様式へ自然に馴染みやすい状態です。',shortDesc:'神霊的性質は普段は穏やかで、必要な場面に応じて表れやすい状態です。'},
+  {min:40,max:60,name:'均衡域',desc:'神性は一定程度観測されるものの、顕著な表出・潜在のいずれにも偏らない状態です。',shortDesc:'神霊的性質が、強く潜むことも表出することもなく均衡して現れています。'},
+  {min:61,max:80,name:'顕在域',desc:'神霊としての性質が、言動・感覚・存在様式などに比較的明瞭に表れている状態です。',shortDesc:'神霊的性質が比較的はっきり表れ、日常の言動にもにじみやすい状態です。'},
+  {min:81,max:94,name:'高顕現域',desc:'神性が強く表層化しており、人間とは異なる認識や価値基準が現れる場合があります。',shortDesc:'神霊的性質が強く表れ、人とは異なる認識や価値基準が現れることがあります。'},
+  {min:95,max:100,name:'観測注意域',desc:'神性が極めて強く顕在化しており、通常の人間的尺度だけでは捉えにくい可能性がある状態です。',shortDesc:'神霊的性質が非常に強く表出し、人間的な尺度だけでは捉えにくい状態です。'}
+];
+
+// 神性値：顕現日・時間帯・事前提出資料・呼び名（ふりがな）を材料にする。
+// ひらがな一文字ごとにUnicode順の固有値を与え、文字順も含めて呼称コードを生成する。
+function kanaNumericValue(ch){return ch.codePointAt(0)-0x3040;}
+function nameObservationCode(kana){
+  let h=2166136261>>>0;
+  [...kana].forEach((ch,i)=>{
+    const v=kanaNumericValue(ch);
+    h^=Math.imul(v,i+1);
+    h=Math.imul(h,16777619)>>>0;
+  });
+  return h>>>0;
+}
+function mixDivinitySeed(year,month,day,timeCode,materialCode,kana){
+  const dateSerial=year*10000+month*100+day;
+  let seed=dateSerial>>>0;
+  seed^=Math.imul(nameObservationCode(kana),0x045d9f3b);
+  seed^=Math.imul(Number(timeCode)+1,0x27d4eb2d);
+  seed^=Math.imul(Number(materialCode),0x165667b1);
+  seed^=seed>>>16;
+  seed=Math.imul(seed,0x7feb352d)>>>0;
+  seed^=seed>>>15;
+  seed=Math.imul(seed,0x846ca68b)>>>0;
+  seed^=seed>>>16;
+  return seed>>>0;
+}
+function mapDivinityValue(seed){
+  const u=(seed>>>0)/4294967296;
+  const segments=[
+    [0,.255,0,19],[.255,.45,20,39],[.45,.55,40,60],[.55,.745,61,80],
+    [.745,.96,81,94],[.96,.998,95,99],[.998,1,100,100]
+  ];
+  for(const [a,b,lo,hi] of segments){
+    if(u>=a&&u<b){
+      if(lo===hi)return lo;
+      const frac=(u-a)/(b-a);
+      return lo+Math.min(hi-lo,Math.floor(frac*(hi-lo+1)));
+    }
+  }
+  return 100;
+}
+function calculateDivinity(year,month,day,timeCode,materialCode,kana){
+  const seed=mixDivinitySeed(year,month,day,timeCode,materialCode,kana);
+  const value=mapDivinityValue(seed);
+  const band=DIVINITY_BANDS.find(b=>value>=b.min&&value<=b.max);
+  return {value,band};
+}
+
+const MATERIAL_LABELS={none:'資料なし',personal:'私物',accessory:'装身具',battlewear:'装束（戦闘）',dutywear:'装束（内番）',treasure:'宝物',observation:'観測札',precision:'精密観測札'};
+const FLUCTUATION_BANDS=[
+  {min:0,max:15,name:'低位観測域',desc:'標準的な観測範囲と比較して、低い変動値が確認されています。現在の対象個体は、特定の存在様式を強く維持する傾向にあります。状態の変化が生じた場合にも、自己のあり方を一定の範囲内に保つことが多いと推定されます。標準より低い数値となりますが、これは個体の状態の良否を示すものではありません。',shortDesc:'存在のあり方を強く保ち、周囲が変化しても大きく揺らぎにくい一振りです。'},
+  {min:16,max:34,name:'低変動域',desc:'存在様式の変動は比較的小さく、一定の状態を維持する傾向が確認されています。周囲の環境や関係性が変化した場合にも、対象個体自身のあり方は比較的変化しにくいと推定されます。標準より低い数値となりますが、これは個体の状態の良否を示すものではありません。',shortDesc:'周囲が変化しても、存在のあり方を比較的一定に保ちやすい一振りです。'},
+  {min:35,max:65,name:'通常観測域',desc:'存在様式には一定の変動幅が認められますが、標準的な観測範囲内です。状況や周囲との関係に応じて変化しながら、対象個体としての一貫性を維持している状態と推定されます。',shortDesc:'周囲との関係に応じて変化しながらも、一貫した存在のあり方を保っています。'},
+  {min:66,max:84,name:'高変動域',desc:'存在様式には比較的大きな変動幅が確認されています。状況や周囲との関係に応じ、対象個体が示す性質や現世との関わり方が変化しやすい傾向にあります。標準より高い数値となりますが、これは個体の状態の良否を示すものではありません。',shortDesc:'周囲の環境や関係性に応じて、存在のあり方が大きく変化しやすい一振りです。'},
+  {min:85,max:100,name:'高位観測域',desc:'標準的な観測範囲と比較して、高い変動値が確認されています。対象個体は、複数の存在様式のあいだで大きな変動幅を持つと推定されます。標準より高い数値となりますが、これは個体の状態の良否を示すものではありません。',shortDesc:'複数の存在様式を示しやすく、大きな変動幅が観測される一振りです。'}
+];
+const TRAIT_FLUCTUATION={1:-3,2:0,3:2,4:-8,5:8,6:0,7:3,8:-5,9:-4,11:4,22:-2,33:5};
+const MASTER_FLUCTUATION={respect:-5,trust:-3,affection:-4,protect:-3,close:-5,guide:-2,thoughtful:-2,independent:-1,free:0,service:-4};
+const SWORD_FLUCTUATION={social:-2,ensemble:0,assist:-2,intimate:-1,harmony:0,training:2,observe:-1,autonomous:1,freewheeling:3,bond:-3};
+
+// 情緒×神性は、双方の強さだけでなく「どちらか一方へ偏っているか」も参照する。
+// 下の観測格子を連続補間し、極端な片寄りは低方向、双方の高値は高方向へ作用させる。
+const STATE_GRID_POINTS=[10,30,50,70,90];
+const STATE_GRID=[
+  [-2,-3,-4,-7,-12],
+  [-3,-4,-2,-3,-6],
+  [-4,-2,0,3,7],
+  [-7,-3,3,10,16],
+  [-12,-6,7,16,26]
+];
+function stateGridPosition(value){
+  const v=Math.max(10,Math.min(90,value));
+  if(v>=90)return {i:3,t:1};
+  const i=Math.floor((v-10)/20);
+  return {i,t:(v-STATE_GRID_POINTS[i])/20};
+}
+function calculateStateAdjustment(emotion,divinity){
+  const e=stateGridPosition(emotion),g=stateGridPosition(divinity);
+  const a=STATE_GRID[e.i][g.i],b=STATE_GRID[e.i+1][g.i],c=STATE_GRID[e.i][g.i+1],d=STATE_GRID[e.i+1][g.i+1];
+  return Math.round(a*(1-e.t)*(1-g.t)+b*e.t*(1-g.t)+c*(1-e.t)*g.t+d*e.t*g.t);
+}
+function mixFluctuationSeed(year,month,day,kana){
+  let seed=Math.imul(year*10000+month*100+day,0x6d2b79f5)>>>0;
+  [...kana].forEach((ch,i)=>{
+    seed^=Math.imul(kanaNumericValue(ch)+(i+1)*97,0x9e3779b1);
+    seed=Math.imul(seed^(seed>>>15),0x85ebca6b)>>>0;
+  });
+  seed^=seed>>>16; seed=Math.imul(seed,0x7feb352d)>>>0; seed^=seed>>>15;
+  return seed>>>0;
+}
+function hashToUnit(seed){return (seed>>>0)/4294967296;}
+function nextMixedSeed(seed){seed^=seed>>>16;seed=Math.imul(seed,0x45d9f3b)>>>0;seed^=seed>>>16;return seed>>>0;}
+function calculateFluctuation(year,month,day,kana,emotion,divinity,traitNumber,masterKey,swordKey,isStarter,isAttendant){
+  const seed1=mixFluctuationSeed(year,month,day,kana);
+  const seed2=nextMixedSeed(seed1^0xa5a5a5a5);
+  // 基礎値は中央寄り。呼称の長さは5文字を基準に、1文字につき3点だけ傾向を与える。
+  const base=Math.round(16+((hashToUnit(seed1)+hashToUnit(seed2))/2)*68);
+  const lengthAdjustment=Math.max(-12,Math.min(15,([...kana].length-5)*3));
+  const stateAdjustment=calculateStateAdjustment(emotion,divinity);
+  const traitAdjustment=TRAIT_FLUCTUATION[traitNumber]??0;
+  const masterAdjustment=MASTER_FLUCTUATION[masterKey]??0;
+  const swordAdjustment=SWORD_FLUCTUATION[swordKey]??0;
+  const measured=base+lengthAdjustment+stateAdjustment+traitAdjustment+masterAdjustment+swordAdjustment;
+  // 過去の観測事例に基づく実効予測補正：50からの距離を1.25倍して、実際の変動幅を推定する。
+  const predicted=Math.round(50+(measured-50)*1.25);
+  // 初期刀・近侍は、審神者との長期的／継続的な接触により、元来の傾向が外側へ明瞭化する。
+  const relationMagnitude=(isStarter&&isAttendant)?10:((isStarter||isAttendant)?6:0);
+  const relationAdjustment=relationMagnitude===0?0:(predicted<=50?-relationMagnitude:relationMagnitude);
+  const value=Math.max(0,Math.min(100,predicted+relationAdjustment));
+  const band=FLUCTUATION_BANDS.find(b=>value>=b.min&&value<=b.max);
+  return {value,band,measured,predicted,base,lengthAdjustment,stateAdjustment,traitAdjustment,masterAdjustment,swordAdjustment,relationAdjustment};
+}
+function getSpecialNote(emotion,divinity,traitNumber,fluctuation){
+  // 優先順位：顕現特性との特異な組み合わせ ＞ 神性・情緒の大差 ＞ 同方向の極端値。
+  if(traitNumber===4&&fluctuation>=85)return {type:'special',text:'顕現特性に対し、存在の揺らぎに高い値が確認されています。現時点では観測上の矛盾とは判断されません。'};
+  if(traitNumber===5&&fluctuation<=15)return {type:'special',text:'顕現特性に対し、存在の揺らぎに低い値が確認されています。現時点では観測上の矛盾とは判断されません。'};
+  if(traitNumber===9&&fluctuation>=85)return {type:'special',text:'複数の存在側面が確立されている一方、存在の揺らぎに高い値が確認されています。特異な組み合わせの観測例として記録されます。'};
+  if(divinity>=85&&emotion<=15)return {type:'note',text:'神性と情緒の観測値に大きな差異が確認されています。神霊的性質が強く表出する一方、顕現後の経験による個体独自の情緒形成は比較的限定されています。'};
+  if(emotion>=85&&divinity<=15)return {type:'note',text:'神性と情緒の観測値に大きな差異が確認されています。顕現後の経験によって形成された個体独自の心や性格が強く表れ、神霊的性質は比較的表出しにくい状態と推定されます。'};
+  if(divinity>=85&&emotion>=85)return {type:'note',text:'神性・情緒の双方に高い観測値が確認されています。神霊的性質と、顕現後に形成された個体独自の心や性格が、ともに強く表れる個体として記録されます。'};
+  if(divinity<=15&&emotion<=15)return {type:'note',text:'神性・情緒の双方に低い観測値が確認されています。顕現時から備える性質が比較的強く保たれ、神霊的性質は穏やかに表れる個体として記録されます。'};
+  return null;
+}
+function revealFluctuationResult(){
+  document.getElementById('fluctuationResult').style.display='block';
+  document.getElementById('revealFluctuation').style.display='none';
+  document.getElementById('resultActions').style.display='block';
+}
+
+let lastResult=null;
+const TIME_LABELS={dawn:'夜明け',morning:'朝',day:'昼',dusk:'夕暮れ',evening:'宵',unknown:'分からない'};
+
+function reduceManifestNumber(n){
+  const masters=[11,22,33];
+  while(n>9 && !masters.includes(n)){
+    n=String(n).split('').reduce((a,b)=>a+Number(b),0);
+  }
+  return n;
+}
+function calculateManifestNumber(dateString,materialCode,timeCode){
+  const digits=dateString.replace(/\D/g,'').split('').map(Number);
+  const raw=digits.reduce((a,b)=>a+b,0)+Number(materialCode)+Number(timeCode);
+  return {raw,number:reduceManifestNumber(raw)};
+}
+function diagnose(){
+  const formalName=document.getElementById('formalName').value.trim();
+  const name=document.getElementById('name').value.trim();
+  const kana=document.getElementById('kana').value.trim();
+  const year=document.getElementById('manifestYear').value.trim();
+  const month=document.getElementById('manifestMonth').value.trim();
+  const day=document.getElementById('manifestDay').value.trim();
+  const timeband=document.querySelector('input[name="timeband"]:checked');
+  const material=document.querySelector('input[name="material"]:checked');
+  const starter=document.querySelector('input[name="starter"]:checked');
+  const attendant=document.querySelector('input[name="attendant"]:checked');
+  const food=document.querySelector('input[name="food"]:checked');
+  const battle=document.querySelector('input[name="battle"]:checked');
+  const play=document.querySelector('input[name="play"]:checked');
+  const error=document.getElementById('error');
+  if(!formalName||!name||!kana||!year||!month||!day||!timeband||!material||!starter||!attendant||!food||!battle||!play){error.textContent='刀剣名・普段の呼び名・顕現記録・事前提出資料・本丸での位置づけ・食事・戦い・遊びの印象をすべて入力してください。';return}
+  if(!/^\d{4}$/.test(year)||!/^\d{1,2}$/.test(month)||!/^\d{1,2}$/.test(day)){error.textContent='顕現日は、年・月・日を数字で入力してください。';return}
+  const y=Number(year),m=Number(month),d=Number(day);
+  const dateObj=new Date(y,m-1,d);
+  if(dateObj.getFullYear()!==y||dateObj.getMonth()!==m-1||dateObj.getDate()!==d){error.textContent='存在する日付を入力してください。';return}
+  const date=`${String(y).padStart(4,'0')}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+  if(!/^[\u3041-\u3096ー]+$/.test(kana)){error.textContent='ふりがなは、ひらがなのみで入力してください。';return}
+  if(kana.startsWith('ー')||!kanaGroup(kana)){error.textContent='ふりがなの最初の文字を判定できません。ひらがなで入力してください。';return}
+  error.textContent='';
+  // 時間帯が不明な場合は、顕現年の下一桁を5区分へ疑似割り当てして観測値を補完する。
+  // 0・5→夜明け相当、1・6→朝相当、2・7→昼相当、3・8→夕暮れ相当、4・9→宵相当。
+  const effectiveTimeCode=timeband.value==='unknown'?(y%5):Number(timeband.dataset.code);
+  const calc=calculateManifestNumber(date,material.dataset.code,effectiveTimeCode);
+  const trait=TRAITS[calc.number];
+  const masterCalc=calculateMasterTendency(kana,food.value,battle.value,play.value);
+  const master=MASTER_TYPES[masterCalc.key];
+  const swordCalc=calculateSwordTendency(masterCalc.key,food.value,battle.value,play.value);
+  const sword=SWORD_TYPES[swordCalc.key];
+  const emotion=calculateEmotion(y,m,d,kana,food.value,battle.value,play.value);
+  const divinity=calculateDivinity(y,m,d,effectiveTimeCode,material.dataset.code,kana);
+  const isStarter=starter.value==='yes';
+  const isAttendant=attendant.value==='yes';
+  const fluctuation=calculateFluctuation(y,m,d,kana,emotion.value,divinity.value,calc.number,masterCalc.key,swordCalc.key,isStarter,isAttendant);
+  if(!trait||!master||!sword||!emotion.band||!divinity.band||!fluctuation.band){error.textContent='観測値の算出に失敗しました。入力内容を確認してください。';return}
+  document.getElementById('resultName').textContent=formalName;
+  document.getElementById('manifestNumber').textContent=`顕現特性 No. ${trait.displayNo}`;
+  document.getElementById('traitName').textContent=trait.name;
+  document.getElementById('traitCatch').textContent=trait.catch;
+  document.getElementById('traitText').textContent=`今回観測した${formalName}は、${trait.text}`;
+  document.getElementById('traitDetailLink').href=`manifestation_traits.html#trait-${trait.displayNo}`;
+  document.getElementById('masterValue').textContent=master.name;
+  document.getElementById('masterCatch').textContent=master.catch;
+  document.getElementById('masterDetailLink').href=`master_tendencies.html#trait-${master.displayNo}`;
+  document.getElementById('swordValue').textContent=sword.name;
+  document.getElementById('swordCatch').textContent=sword.catch;
+  document.getElementById('swordDetailLink').href=`sword_tendencies.html#trait-${sword.displayNo}`;
+  document.getElementById('emotionValue').innerHTML=`${emotion.value}<small>/ 100</small>`;
+  document.getElementById('emotionBand').textContent=emotion.band.name;
+  document.getElementById('emotionDesc').textContent=emotion.band.shortDesc;
+  document.getElementById('emotionFill').style.width=`${emotion.value}%`;
+  document.getElementById('divinityValue').innerHTML=`${divinity.value}<small>/ 100</small>`;
+  document.getElementById('divinityBand').textContent=divinity.band.name;
+  document.getElementById('divinityDesc').textContent=divinity.band.shortDesc;
+  document.getElementById('divinityFill').style.width=`${divinity.value}%`;
+  document.getElementById('divinityWarning').style.display=divinity.value>=95?'block':'none';
+  document.getElementById('divinityDetailLink').href=`divinity.html#band-${divinity.band.min}`;
+  const region=(emotion.value<50?(divinity.value<50?'Ⅰ':'Ⅲ'):(divinity.value<50?'Ⅱ':'Ⅳ'));
+  const regionDescriptions={
+    'Ⅰ':'顕現時からの在り方が比較的安定しており、神霊的な性質は穏やかに表れる領域です。',
+    'Ⅱ':'本丸での経験による個体化が強く、神性は比較的穏やかに観測される領域です。',
+    'Ⅲ':'顕現時からの在り方を保ちながら、神霊的性質が強く表れる領域です。',
+    'Ⅳ':'個体固有の情緒と神霊的性質が、ともに強く観測される領域です。'
+  };
+  document.getElementById('regionValue').textContent=`観測領域 ${region}`;
+  document.getElementById('regionDesc').textContent=regionDescriptions[region];
+  const miniPt=document.getElementById('miniRegionPoint');
+  miniPt.style.display='block';miniPt.style.left=`${Math.max(2,Math.min(98,emotion.value))}%`;miniPt.style.bottom=`${Math.max(2,Math.min(98,divinity.value))}%`;
+  document.getElementById('regionDetailLink').href=`emotion_divinity.html?emotion=${emotion.value}&divinity=${divinity.value}`;
+  document.getElementById('fluctuationValue').innerHTML=`${fluctuation.value}<small>/ 100</small>`;
+  document.getElementById('fluctuationBand').textContent=fluctuation.band.name;
+  document.getElementById('fluctuationDesc').textContent=fluctuation.band.shortDesc;
+  document.getElementById('fluctuationFill').style.width=`${fluctuation.value}%`;
+  const specialNote=getSpecialNote(emotion.value,divinity.value,calc.number,fluctuation.value);
+  document.getElementById('specialNoteText').textContent=specialNote?.text||'';
+  document.querySelector('#specialNote strong').textContent=specialNote?.type==='special'?'特殊記録':'特記事項';
+  document.getElementById('specialNote').style.display=specialNote?'block':'none';
+  const extreme=fluctuation.value<=15||fluctuation.value>=85;
+  document.getElementById('extraExamTitle').textContent=extreme?'追加審査のご案内':'追加審査について';
+  document.getElementById('extraExamText').textContent=extreme?'通常の観測範囲から大きく外れた値が確認されています。必要に応じ、追加審査の実施も検討してください。':'より詳細な個体観測を希望する場合は、追加審査を任意で受けることができます。';
+  document.getElementById('extraExamBox').className=`extra-exam ${extreme?'extreme':'normal'}`;
+  document.getElementById('fluctuationResult').style.display='none';
+  document.getElementById('revealFluctuation').style.display='inline-block';
+  document.getElementById('resultActions').style.display='none';
+  document.getElementById('metaRow').textContent=`顕現記録：${date.replaceAll('-','.')} / 時間帯：${TIME_LABELS[timeband.value]} / 事前提出資料：${MATERIAL_LABELS[material.value]} / 初期刀：${isStarter?'該当':'非該当'} / 現在の近侍：${isAttendant?'該当':'非該当'} / 顕現特性：No.${trait.displayNo} / 対主傾向：${master.name} / 対刀傾向：${sword.name} / 情緒：${emotion.value} / 神性：${divinity.value} / 存在の揺らぎ：${fluctuation.value}`;
+  lastResult={formalName,name,kana,trait,master,sword,emotion,divinity,region,fluctuation,specialNote,extreme,date,timeLabel:TIME_LABELS[timeband.value],materialLabel:MATERIAL_LABELS[material.value],isStarter,isAttendant,effectiveTimeCode,foodLabel:getSelectedLabel('food'),battleLabel:getSelectedLabel('battle'),playLabel:getSelectedLabel('play')};
+  const result=document.getElementById('result');result.style.display='block';result.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function getSelectedLabel(name){const el=document.querySelector(`input[name=\"${name}\"]:checked`);return el?el.closest('label')?.innerText.trim()||el.value:'';}
+function safeFileName(text){return (text||'touken').replace(/[\\/:*?"<>|\s]+/g,'_').slice(0,40)||'touken';}
+function canvasFont(size,weight='normal'){return `${weight} ${size}px "Yu Mincho","Hiragino Mincho ProN","Noto Serif JP",serif`;}
+function drawWrappedText(ctx,text,x,y,maxWidth,lineHeight,maxLines=99){
+  const chars=[...String(text)];let line='',lines=[];
+  for(const ch of chars){const test=line+ch;if(ctx.measureText(test).width>maxWidth&&line){lines.push(line);line=ch;}else line=test;}
+  if(line)lines.push(line);if(lines.length>maxLines){lines=lines.slice(0,maxLines);lines[maxLines-1]=lines[maxLines-1].replace(/.$/,'…');}
+  lines.forEach((l,i)=>ctx.fillText(l,x,y+i*lineHeight));return y+lines.length*lineHeight;
+}
+let activeExportUrl='';
+function isTouchDevice(){return (navigator.maxTouchPoints||0)>0 || (window.matchMedia&&window.matchMedia('(pointer:coarse)').matches);}
+function closeExportModal(){const modal=document.getElementById('exportModal');if(modal)modal.classList.remove('open');if(activeExportUrl){URL.revokeObjectURL(activeExportUrl);activeExportUrl='';}}
+function showExportModal(blob,filename){
+  const modal=document.getElementById('exportModal'),img=document.getElementById('exportPreview'),link=document.getElementById('exportDownloadLink'),shareBtn=document.getElementById('exportShareBtn');
+  if(!modal||!img||!link)return;
+  if(activeExportUrl)URL.revokeObjectURL(activeExportUrl);activeExportUrl=URL.createObjectURL(blob);img.src=activeExportUrl;link.href=activeExportUrl;link.download=filename;
+  const file=new File([blob],filename,{type:'image/png'});const canFileShare=!!(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]}));shareBtn.style.display=canFileShare?'inline-block':'none';
+  shareBtn.onclick=async()=>{try{await navigator.share({files:[file],title:'刀剣男士個体観測'});}catch(e){if(e&&e.name!=='AbortError')console.warn(e);}};
+  modal.classList.add('open');modal.setAttribute('aria-hidden','false');
+}
+function exportCanvas(canvas,filename){canvas.toBlob(blob=>{if(!blob)return;if(isTouchDevice()){showExportModal(blob,filename);return;}const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);},'image/png');}
+
+function drawFitText(ctx,text,x,y,maxWidth,startSize,minSize=18,weight='bold',align='left'){
+  let size=startSize;ctx.textAlign=align;
+  while(size>minSize){ctx.font=canvasFont(size,weight);if(ctx.measureText(String(text)).width<=maxWidth)break;size-=2;}
+  ctx.fillText(String(text),x,y);return size;
+}
+function saveResultImage(){
+  if(!lastResult)return;
+  const r=lastResult,c=document.createElement('canvas');c.width=1200;c.height=1660;const ctx=c.getContext('2d');
+  ctx.fillStyle='#eef3f5';ctx.fillRect(0,0,c.width,c.height);ctx.fillStyle='#f9fbfc';ctx.fillRect(58,55,1084,1550);ctx.strokeStyle='#9baeb7';ctx.lineWidth=2;ctx.strokeRect(58,55,1084,1550);ctx.fillStyle='#304d60';ctx.fillRect(58,55,1084,12);
+  ctx.textAlign='left';ctx.fillStyle='#607985';ctx.font='22px Arial';ctx.fillText('TOUKEN INDIVIDUAL OBSERVATION FILE',100,118);
+  ctx.fillStyle='#263d49';ctx.font=canvasFont(42,'bold');ctx.fillText('刀剣男士 個体観測記録',100,180);
+  ctx.textAlign='right';ctx.fillStyle='#607985';ctx.font=canvasFont(18,'bold');ctx.fillText('対象個体',1100,122);ctx.fillStyle='#223b48';drawFitText(ctx,r.formalName,1100,178,430,36,22,'bold','right');ctx.textAlign='left';
+  const statusTags=[];if(r.isStarter)statusTags.push('初期刀');if(r.isAttendant)statusTags.push('近侍');
+  if(statusTags.length){ctx.font=canvasFont(14,'bold');let tagRight=1100;for(const tag of [...statusTags].reverse()){const tw=ctx.measureText(tag).width+28,tx=tagRight-tw;ctx.fillStyle='#f1f5f7';ctx.fillRect(tx,194,tw,28);ctx.strokeStyle='#9eb0b8';ctx.lineWidth=1;ctx.strokeRect(tx,194,tw,28);ctx.fillStyle='#536d79';ctx.textAlign='center';ctx.fillText(tag,tx+tw/2,213);tagRight=tx-8;}ctx.textAlign='left';}
+  ctx.strokeStyle='#c5d1d6';ctx.beginPath();ctx.moveTo(100,235);ctx.lineTo(1100,235);ctx.stroke();
+  ctx.fillStyle='#5b7380';ctx.font=canvasFont(22,'bold');ctx.fillText(`顕現特性  No.${r.trait.displayNo}`,100,300);ctx.fillStyle='#234454';ctx.font=canvasFont(46,'bold');ctx.fillText(r.trait.name,100,358);ctx.fillStyle='#627680';ctx.font=canvasFont(23);drawWrappedText(ctx,r.trait.catch,100,398,970,35,2);
+  const boxY=432,boxW=480,boxH=175;for(const [i,label,val,sub] of [[0,'対主傾向',r.master.name,r.master.catch],[1,'対刀傾向',r.sword.name,r.sword.catch]]){const x=100+i*520;ctx.fillStyle='#f1f6f8';ctx.fillRect(x,boxY,boxW,boxH);ctx.strokeStyle='#b6c6cd';ctx.strokeRect(x,boxY,boxW,boxH);ctx.fillStyle='#617986';ctx.font=canvasFont(19,'bold');ctx.fillText(label,x+24,boxY+38);ctx.fillStyle='#294b5c';ctx.font=canvasFont(33,'bold');ctx.fillText(val,x+24,boxY+82);ctx.fillStyle='#667983';ctx.font=canvasFont(17);drawWrappedText(ctx,sub,x+24,boxY+119,boxW-48,26,2);}
+  const valY=643;for(const [i,label,obj] of [[0,'情緒',r.emotion],[1,'神性',r.divinity]]){const x=100+i*520;ctx.fillStyle='#f4f8f9';ctx.fillRect(x,valY,480,230);ctx.strokeStyle='#b6c6cd';ctx.strokeRect(x,valY,480,230);ctx.fillStyle='#4c6876';ctx.font=canvasFont(23,'bold');ctx.fillText(label,x+24,valY+42);ctx.textAlign='right';ctx.fillStyle='#234858';ctx.font=canvasFont(58,'bold');ctx.fillText(String(obj.value).padStart(2,'0'),x+440,valY+66);ctx.textAlign='left';ctx.fillStyle='#526d7b';ctx.font=canvasFont(22,'bold');ctx.fillText(obj.band.name,x+24,valY+105);ctx.fillStyle='#dce7eb';ctx.fillRect(x+24,valY+132,432,16);ctx.fillStyle='#466f86';ctx.fillRect(x+24,valY+132,432*obj.value/100,16);ctx.fillStyle='#697d86';ctx.font=canvasFont(16);drawWrappedText(ctx,obj.band.shortDesc,x+24,valY+178,430,24,2);}
+  const region=r.emotion.value<50?(r.divinity.value<50?'Ⅰ':'Ⅲ'):(r.divinity.value<50?'Ⅱ':'Ⅳ');
+  const regionDesc={Ⅰ:'情緒値・神性値ともに低い領域です。',Ⅱ:'情緒値が高く、神性値が低い領域です。',Ⅲ:'情緒値が低く、神性値が高い領域です。',Ⅳ:'情緒値・神性値ともに高い領域です。'}[region];
+  const ry=905,regionH=244;ctx.fillStyle='#f7fafb';ctx.fillRect(100,ry,1000,regionH);ctx.strokeStyle='#b6c6cd';ctx.lineWidth=1;ctx.strokeRect(100,ry,1000,regionH);ctx.fillStyle='#71838c';ctx.font='14px Arial';ctx.fillText('EMOTION × DIVINITY / OBSERVATION REGION',128,ry+38);ctx.fillStyle='#405762';ctx.font=canvasFont(30,'bold');ctx.fillText(`観測領域 ${region}`,128,ry+82);ctx.fillStyle='#647881';ctx.font=canvasFont(17);ctx.fillText(regionDesc,128,ry+119);
+  const mx=875,my=938,ms=156;ctx.fillStyle='#fbfcfd';ctx.fillRect(mx,my,ms,ms);ctx.strokeStyle='#aab8be';ctx.strokeRect(mx,my,ms,ms);ctx.strokeStyle='#b6c1c6';ctx.beginPath();ctx.moveTo(mx+ms/2,my);ctx.lineTo(mx+ms/2,my+ms);ctx.moveTo(mx,my+ms/2);ctx.lineTo(mx+ms,my+ms/2);ctx.stroke();ctx.fillStyle='#82939b';ctx.font='12px Arial';ctx.fillText('Ⅲ',mx+9,my+17);ctx.textAlign='right';ctx.fillText('Ⅳ',mx+ms-9,my+17);ctx.fillText('Ⅱ',mx+ms-9,my+ms-9);ctx.textAlign='left';ctx.fillText('Ⅰ',mx+9,my+ms-9);ctx.fillStyle='#81929a';ctx.font=canvasFont(12);ctx.textAlign='center';ctx.fillText('神性値：高',mx+ms/2,my-10);ctx.fillText('神性値：低',mx+ms/2,my+ms+18);ctx.textAlign='left';ctx.fillText('情緒値：低',mx-4,my+ms+38);ctx.textAlign='right';ctx.fillText('情緒値：高',mx+ms+4,my+ms+38);const px=mx+Math.max(3,Math.min(97,r.emotion.value))/100*ms,py=my+ms-Math.max(3,Math.min(97,r.divinity.value))/100*ms;ctx.beginPath();ctx.arc(px,py,6,0,Math.PI*2);ctx.fillStyle='#405f70';ctx.fill();ctx.lineWidth=2;ctx.strokeStyle='#fff';ctx.stroke();ctx.textAlign='left';
+  if(r.specialNote){ctx.fillStyle='#5d7078';ctx.font=canvasFont(16,'bold');ctx.fillText(r.specialNote.type==='special'?'特殊記録':'特記事項',128,ry+165);ctx.font=canvasFont(15);drawWrappedText(ctx,r.specialNote.text,230,ry+165,610,23,2);}
+  const fy=1200;ctx.fillStyle=r.extreme?'#fbf0f1':'#eef5f7';ctx.fillRect(100,fy,1000,285);ctx.strokeStyle=r.extreme?'#b47b83':'#9eb7c2';ctx.lineWidth=2;ctx.strokeRect(100,fy,1000,285);ctx.fillStyle='#536f7c';ctx.font=canvasFont(23,'bold');ctx.fillText('存在の揺らぎ',128,fy+45);ctx.textAlign='right';ctx.fillStyle=r.extreme?'#79434b':'#244a5b';ctx.font=canvasFont(78,'bold');const fl=String(r.fluctuation.value).padStart(2,'0');ctx.fillText(`${fl} / 100`,1068,fy+88);ctx.textAlign='left';ctx.fillStyle=r.extreme?'#75464d':'#405e6d';ctx.font=canvasFont(27,'bold');ctx.fillText(r.fluctuation.band.name,128,fy+100);ctx.fillStyle='#687b84';ctx.font=canvasFont(18);drawWrappedText(ctx,r.fluctuation.band.shortDesc,128,fy+140,900,29,3);
+  if(r.extreme){ctx.fillStyle='#7a454d';ctx.font=canvasFont(15,'bold');ctx.fillText('追加審査の実施も検討してください。',128,fy+265);}
+  ctx.fillStyle='#82949d';ctx.font='17px Arial';ctx.fillText('UNOFFICIAL FAN-MADE / ver.1.0',100,1548);ctx.textAlign='right';ctx.fillText('INDIVIDUAL OBSERVATION RECORD',1100,1548);
+  exportCanvas(c,`touken_observation_file_${safeFileName(r.formalName)}.png`);
+}
+function saveDetailedRecord(){
+  if(!lastResult)return;
+  const r=lastResult,c=document.createElement('canvas');c.width=1200;c.height=2050;const ctx=c.getContext('2d');
+  ctx.fillStyle='#e6ecef';ctx.fillRect(0,0,c.width,c.height);ctx.fillStyle='#fafcfc';ctx.fillRect(58,50,1084,1945);ctx.strokeStyle='#9baeb7';ctx.lineWidth=2;ctx.strokeRect(58,50,1084,1945);ctx.fillStyle='#304d60';ctx.fillRect(58,50,1084,12);
+  ctx.textAlign='left';ctx.fillStyle='#607985';ctx.font='21px Arial';ctx.fillText('TOUKEN INDIVIDUAL DETAILED OBSERVATION FILE',100,112);
+  ctx.fillStyle='#263d49';ctx.font=canvasFont(41,'bold');ctx.fillText('刀剣男士 個体観測詳細記録',100,174);
+  ctx.textAlign='right';ctx.fillStyle='#607985';ctx.font=canvasFont(18,'bold');ctx.fillText('対象個体',1100,116);ctx.fillStyle='#223b48';drawFitText(ctx,r.formalName,1100,174,420,35,21,'bold','right');ctx.textAlign='left';
+  ctx.strokeStyle='#c5d1d6';ctx.beginPath();ctx.moveTo(100,226);ctx.lineTo(1100,226);ctx.stroke();
+
+  const section=(title,y)=>{ctx.fillStyle='#e9f0f3';ctx.fillRect(100,y,1000,48);ctx.fillStyle='#3e5c6b';ctx.font=canvasFont(20,'bold');ctx.fillText(title,122,y+32);return y+84;};
+  const row=(label,value,y)=>{ctx.fillStyle='#607681';ctx.font=canvasFont(17,'bold');ctx.fillText(label,125,y);ctx.fillStyle='#2d4653';ctx.font=canvasFont(18);ctx.fillText(String(value),360,y);ctx.strokeStyle='#dde5e8';ctx.beginPath();ctx.moveTo(125,y+17);ctx.lineTo(1075,y+17);ctx.stroke();return y+48;};
+
+  let y=270;y=section('観測記録',y);
+  y=row('顕現日',r.date.replaceAll('-','.'),y);y=row('顕現時間帯',r.timeLabel,y);y=row('事前提出資料',r.materialLabel,y);y=row('初期刀',r.isStarter?'該当':'非該当',y);y=row('現在の近侍',r.isAttendant?'該当':'非該当',y);
+  y+=10;y=section('本丸内観測記録',y);y=row('食事について',r.foodLabel,y);y=row('戦いについて',r.battleLabel,y);y=row('遊びについて',r.playLabel,y);
+  y+=10;y=section('呼称記録',y);y=row('刀剣名',r.formalName,y);y=row('普段の呼び名',r.name,y);y=row('普段の呼び名のふりがな',r.kana,y);
+  y+=10;y=section('観測結果',y);y=row('顕現特性',`No.${r.trait.displayNo}　${r.trait.name}`,y);y=row('対主傾向',r.master.name,y);y=row('対刀傾向',r.sword.name,y);y=row('情緒',`${r.emotion.value} / 100　${r.emotion.band.name}`,y);y=row('神性',`${r.divinity.value} / 100　${r.divinity.band.name}`,y);
+  {
+    const region=r.emotion.value<50?(r.divinity.value<50?'Ⅰ':'Ⅲ'):(r.divinity.value<50?'Ⅱ':'Ⅳ');
+    const rh=r.specialNote?178:154, rx=125, rw=950;
+    ctx.fillStyle='#f7fafb';ctx.fillRect(rx,y-18,rw,rh);ctx.strokeStyle='#c4d0d5';ctx.lineWidth=1;ctx.strokeRect(rx,y-18,rw,rh);
+    ctx.fillStyle='#607681';ctx.font=canvasFont(17,'bold');ctx.fillText('観測領域',rx+18,y+32);ctx.fillStyle='#2d4653';ctx.font=canvasFont(22,'bold');ctx.fillText(region,rx+235,y+32);
+    const ms=104,mx=rx+rw-155,my=y+13;ctx.fillStyle='#fbfcfd';ctx.fillRect(mx,my,ms,ms);ctx.strokeStyle='#aab8be';ctx.strokeRect(mx,my,ms,ms);ctx.strokeStyle='#b6c1c6';ctx.beginPath();ctx.moveTo(mx+ms/2,my);ctx.lineTo(mx+ms/2,my+ms);ctx.moveTo(mx,my+ms/2);ctx.lineTo(mx+ms,my+ms/2);ctx.stroke();ctx.fillStyle='#82939b';ctx.font='10px Arial';ctx.fillText('Ⅲ',mx+7,my+14);ctx.textAlign='right';ctx.fillText('Ⅳ',mx+ms-7,my+14);ctx.fillText('Ⅱ',mx+ms-7,my+ms-7);ctx.textAlign='left';ctx.fillText('Ⅰ',mx+7,my+ms-7);
+    const px=mx+Math.max(3,Math.min(97,r.emotion.value))/100*ms,py=my+ms-Math.max(3,Math.min(97,r.divinity.value))/100*ms;ctx.beginPath();ctx.arc(px,py,5,0,Math.PI*2);ctx.fillStyle='#405f70';ctx.fill();ctx.lineWidth=2;ctx.strokeStyle='#fff';ctx.stroke();ctx.textAlign='left';
+    if(r.specialNote){ctx.fillStyle='#5d7078';ctx.font=canvasFont(15,'bold');ctx.fillText(r.specialNote.type==='special'?'特殊記録':'特記事項',rx+18,y+91);ctx.font=canvasFont(14);drawWrappedText(ctx,r.specialNote.text,rx+115,y+91,600,22,3);}
+    y+=rh+8;
+  }
+  y=row('存在の揺らぎ',`${r.fluctuation.value} / 100　${r.fluctuation.band.name}`,y);
+  if(r.extreme){ctx.fillStyle='#f7e8ea';ctx.fillRect(100,y+12,1000,84);ctx.strokeStyle='#c6a0a7';ctx.strokeRect(100,y+12,1000,84);ctx.fillStyle='#75434b';ctx.font=canvasFont(18,'bold');ctx.fillText('追加審査のご案内',125,y+45);ctx.font=canvasFont(16);ctx.fillText('必要に応じ、追加審査の実施も検討してください。',125,y+75);y+=112;}
+  ctx.fillStyle='#7f929b';ctx.font=canvasFont(14);drawWrappedText(ctx,'本記録には、対象となる刀剣男士および本丸内の詳細な情報が含まれます。公開・共有の際は、取り扱いにご注意ください。',100,1890,1000,24,2);
+  ctx.fillStyle='#82949d';ctx.font='16px Arial';ctx.fillText('UNOFFICIAL FAN-MADE / ver.1.0',100,1960);ctx.textAlign='right';ctx.fillText('DETAILED OBSERVATION RECORD',1100,1960);
+  exportCanvas(c,`touken_observation_detailed_file_${safeFileName(r.formalName)}.png`);
+}
+document.addEventListener('DOMContentLoaded',()=>{document.getElementById('exportClose')?.addEventListener('click',closeExportModal);document.getElementById('exportCloseBtn')?.addEventListener('click',closeExportModal);document.getElementById('exportModal')?.addEventListener('click',e=>{if(e.target===e.currentTarget)closeExportModal();});});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeExportModal();});
+
+function shareResult(){
+  if(!lastResult)return;const r=lastResult;
+  const text=`【刀剣乱舞・非公式ファンメイド】刀剣男士個体観測を行いました。\n\n対象個体：${r.formalName}\n顕現特性：${r.trait.name}\n対主傾向：${r.master.name}\n対刀傾向：${r.sword.name}\n情緒：${r.emotion.value}\n神性：${r.divinity.value}\n存在の揺らぎ：${r.fluctuation.value}【${r.fluctuation.band.name}】\n\n#非公式刀剣男士個体観測`;
+  const pageUrl=location.protocol==='file:'?'':location.href.split('#')[0];
+  const url='https://twitter.com/intent/tweet?text='+encodeURIComponent(text)+(pageUrl?'&url='+encodeURIComponent(pageUrl):'');window.open(url,'_blank','noopener,noreferrer');
+}
+
+</script>
+<div class="export-modal" id="exportModal" aria-hidden="true">
+  <div class="export-dialog" role="dialog" aria-modal="true" aria-labelledby="exportTitle">
+    <button type="button" class="export-close" id="exportClose" aria-label="閉じる">×</button>
+    <h3 id="exportTitle">画像を保存・共有</h3>
+    <p>生成した画像です。端末やブラウザに合う方法で保存してください。</p>
+    <img id="exportPreview" class="export-preview" alt="生成した観測記録画像">
+    <div class="export-buttons">
+      <button type="button" id="exportShareBtn">画像を共有</button>
+      <a id="exportDownloadLink" class="secondary" href="#" download>画像をダウンロード</a>
+      <button type="button" class="secondary" id="exportCloseBtn">閉じる</button>
+    </div>
+    <div class="export-help">スマートフォンで直接保存できない場合は、上の画像を長押しして保存してください。対応している端末では「画像を共有」から保存先やアプリを選べます。</div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>存在の揺らぎ 関連資料｜非公式・刀剣男士個体観測</title>
+<style>
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+:root{--bg:#e7e9ea;--paper:#f8f8f7;--ink:#252b2e;--muted:#687176;--line:#c5c9cb;--line2:#d9dcde;--navy:#3f5662;--soft:#f0f1f1}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Yu Gothic","Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif}
+.wrap{width:min(980px,95%);margin:30px auto 64px}
+.topline{display:flex;justify-content:space-between;gap:20px;align-items:center;margin-bottom:12px;font-size:11px;color:#68747a}
+.topline a{color:#435f6d;text-decoration:none;border-bottom:1px solid #8b9ca4}
+.system{border:1px solid #bfc4c7;background:#f4f5f5}
+.system-head{padding:20px 24px 18px;border-bottom:1px solid #bfc4c7;background:#eceeef}
+.system-code{font:10px/1.4 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.12em;color:#6d777c;margin-bottom:7px}
+h1{font-size:21px;letter-spacing:.08em;margin:0 0 9px;font-weight:600}.lead{font-size:12px;line-height:1.85;color:#626d72;margin:0}
+.system-meta{display:grid;grid-template-columns:repeat(3,1fr);border-bottom:1px solid #cbd0d2;background:#f8f8f7}
+.system-meta div{padding:10px 14px;border-right:1px solid #d5d9db;font-size:10px;line-height:1.6;color:#657076}.system-meta div:last-child{border-right:0}.system-meta b{font-weight:600;color:#3f4d54;margin-right:6px}
+.archive{padding:0 22px 24px}
+.archive-head{display:grid;grid-template-columns:90px 1fr 92px;gap:12px;padding:13px 10px 9px;border-bottom:2px solid #9fa8ad;color:#667177;font:10px/1.4 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.06em}
+.record-row{display:grid;grid-template-columns:90px 1fr 92px;gap:12px;align-items:center;padding:13px 10px;border-bottom:1px solid #d3d7d9;background:transparent;cursor:pointer;transition:.12s}
+.record-row:hover{background:#f3f4f4}.record-row.locked{cursor:pointer}.doc-id{font:11px/1.4 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:#56636a}.doc-title{font-size:12px;line-height:1.65;color:#303b40}.status{justify-self:start;font:10px/1.3 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:#52656e}.status.lock{color:#71787c}
+.doc{display:none;padding:22px 24px 26px;border-bottom:1px solid #c8cdcf;background:var(--paper)}.doc.open{display:block}
+.doc-header{display:grid;grid-template-columns:1fr 1fr;gap:5px 26px;padding-bottom:13px;margin-bottom:19px;border-bottom:1px solid #cfd3d5;font:10px/1.65 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:#626d72}.doc-header b{color:#3d494f;font-weight:600}
+.doc h2{font-size:15px;letter-spacing:.04em;margin:20px 0 9px;font-weight:600}.doc p{font-size:12px;line-height:1.95;color:#4f5b60;margin:8px 0}.doc .small{font-size:9.5px;line-height:1.8;color:#747e83}
+.data-table{width:100%;border-collapse:collapse;margin:13px 0 11px;font-size:10.5px;background:#fbfbfa}.data-table th,.data-table td{border:1px solid #c9ced0;padding:8px 9px;text-align:left}.data-table th{background:#eceeef;color:#47545a;font-weight:600}.data-table td.num{text-align:right;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}.data-table td.code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:#53636b}
+.case-list{margin:14px 0;border-top:1px solid #c8cdcf}.case{padding:13px 2px 14px;border-bottom:1px solid #d6dadd}.case-head{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:baseline;margin-bottom:5px}.case-name{font-size:12px;font-weight:600;color:#33434b}.case-code,.case-values{font:10px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:#657178}.case p{margin:4px 0;font-size:11px;line-height:1.9;color:#536066}.quote{margin-top:7px;padding-left:13px;border-left:2px solid #9ca8ad;color:#48575e;font-size:11px;line-height:1.85}.quote .src{display:block;margin-top:3px;font-size:9px;color:#7a8489}
+.extract{margin:14px 0;padding:12px 14px;border:1px solid #c8cdcf;background:#f0f1f1;font:10.5px/1.85 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:#4e5a60}.extract b{color:#2f3d43}.redact{display:inline-block;background:#363b3e;color:#363b3e;padding:0 .18em;user-select:none}
+.denied{display:none;padding:18px 24px 22px;border-bottom:1px solid #c8cdcf;background:#f2f3f3}.denied.open{display:block}.denied-line{font:11px/1.9 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:#515d62}.denied-line strong{font-weight:600;color:#333f44}.denied-note{margin-top:8px;font-size:10px;line-height:1.8;color:#747e82}
+.unofficial{margin:20px 22px 0;padding:12px 14px;border-top:1px solid #ccd1d3;color:#6f797e;font-size:9.5px;line-height:1.8}.footer{text-align:right;color:#8a9296;font:9px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.08em;margin-top:10px}
+@media(max-width:700px){.wrap{margin:14px auto 46px}.topline{align-items:flex-start;flex-direction:column;gap:4px}.system-head{padding:17px 16px}.system-meta{grid-template-columns:1fr}.system-meta div{border-right:0;border-bottom:1px solid #d5d9db}.system-meta div:last-child{border-bottom:0}.archive{padding:0 10px 18px}.archive-head,.record-row{grid-template-columns:72px 1fr}.archive-head div:last-child{display:none}.status{grid-column:2}.doc{padding:18px 14px 22px}.doc-header{grid-template-columns:1fr}.data-table{font-size:9.5px}.data-table th,.data-table td{padding:7px 6px}.case-head{gap:4px 10px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topline"><a href="fluctuation.html">← 戻る</a><span>閲覧セッション / 審神者（一般）</span></div>
+  <main class="system">
+    <header class="system-head">
+      <h1>関連資料閲覧</h1>
+      <p class="lead">検索条件に一致する資料を表示しています。資料ごとの公開区分は、現在の閲覧権限に基づきます。</p>
+    </header>
+    <div class="system-meta">
+      <div><b>資料群</b>存在の揺らぎ</div><div><b>閲覧権限</b>審神者（一般）</div><div><b>表示形式</b>記録抜粋</div>
+    </div>
+    <div class="archive">
+      <div class="archive-head"><div>資料番号</div><div>資料名</div><div>公開区分</div></div>
+
+      <div class="record-row" onclick="toggleDoc('doc01')"><div class="doc-id">EVR-01</div><div class="doc-title">存在の揺らぎの観測開始に関する記録</div><div class="status">公開</div></div>
+      <section class="doc" id="doc01">
+        <div class="doc-header"><div><b>資料番号</b> EVR-01</div><div><b>資料区分</b> 研究記録</div><div><b>記録部門</b> 刀剣管理部 調査課</div><div><b>公開区分</b> 審神者（一般）</div></div>
+        <h2>概要</h2>
+        <p>存在の揺らぎの継続観測を開始した初期調査では、政府管理下で観測記録を有する刀剣男士について、本丸配属前後の値を比較しました。</p>
+        <p>同一の刀剣男士であっても、配属後の変化は一様ではありません。以下は、当時の比較対象から三振りを抜粋した記録です。</p>
+        <table class="data-table"><thead><tr><th>観測対象</th><th>管理番号</th><th>登録先</th><th>配属前平均</th><th>配属後平均</th><th>変動</th></tr></thead><tbody>
+          <tr><td>山姥切長義</td><td class="code">H-04K-0184263</td><td>備前国</td><td class="num">47</td><td class="num">31</td><td class="num">−16</td></tr>
+          <tr><td>肥前忠広</td><td class="code">H-09M-0067548</td><td>相模国</td><td class="num">51</td><td class="num">69</td><td class="num">＋18</td></tr>
+          <tr><td>一文字則宗</td><td class="code">H-11R-0231947</td><td>山城国</td><td class="num">48</td><td class="num">53</td><td class="num">＋5</td></tr>
+        </tbody></table>
+        <p class="small">※配属前平均は政府管理下における直近5回、配属後平均は本丸配属180日以降に実施された5回の観測値から算出。<br>※下記所見を含め、記載内容は各観測個体に関するものであり、同名の刀剣男士に共通する傾向を示すものではありません。</p>
+
+        <div class="case-list">
+          <div class="case">
+            <div class="case-head"><span class="case-name">山姥切長義</span><span class="case-code">観測個体 Y158-0021 / H-04K-0184263 / 登録先：備前国</span><span class="case-values">47 → 31</span></div>
+            <p>配属後、審神者との応答や本丸内での役割分担に、当該個体独自の形式が定着。配属初期と比較して、日常的な会話に当該個体から加わる例が増加したとの報告があります。</p>
+            <div class="quote">「こちらのやり方も、だいたい把握できたかな」<span class="src">対象個体聞き取り／配属後観測時</span></div>
+          </div>
+          <div class="case">
+            <div class="case-head"><span class="case-name">肥前忠広</span><span class="case-code">観測個体 H168-0014 / H-09M-0067548 / 登録先：相模国</span><span class="case-values">51 → 69</span></div>
+            <p>配属後、当初の担当外であった本丸内業務へ当該個体の判断で参加する例が増加。行動選択の幅が広がった時期と、存在の揺らぎの上昇時期がおおむね重なっています。</p>
+            <div class="quote">「最近は、頼む前に手を貸してくれることがあります」<span class="src">配属先審神者からの報告</span></div>
+          </div>
+          <div class="case">
+            <div class="case-head"><span class="case-name">一文字則宗</span><span class="case-code">観測個体 I198-0008 / H-11R-0231947 / 登録先：山城国</span><span class="case-values">48 → 53</span></div>
+            <p>配属前後を通して観測値の大きな変化は確認されず。環境への適応は認められるものの、存在の揺らぎは継続して標準域内を推移しています。</p>
+            <div class="quote">「場所が変われば、楽しみ方も変わるだろう？」<span class="src">対象個体聞き取り／配属後観測時</span></div>
+          </div>
+        </div>
+
+        <p>本調査では、本丸配属によって存在の揺らぎが一定方向へ変化する傾向は確認されませんでした。現在では、顕現後の経験、審神者との関係、本丸内での役割など、複数の要因が個体ごとの観測値に影響する可能性があると考えられています。</p>
+      </section>
+
+      <div class="record-row" onclick="toggleDoc('doc02')"><div class="doc-id">EVR-02</div><div class="doc-title">審神者との継続的接触と存在の揺らぎに関する中間報告</div><div class="status">公開</div></div>
+      <section class="doc" id="doc02">
+        <div class="doc-header"><div><b>資料番号</b> EVR-02</div><div><b>資料区分</b> 中間報告</div><div><b>記録部門</b> 刀剣管理部 調査課</div><div><b>公開区分</b> 審神者（一般）</div></div>
+        <h2>概要</h2>
+        <p>審神者との継続的な接触が、刀剣男士の存在の揺らぎに与える影響について調査した中間報告です。</p>
+        <div class="extract"><b>調査対象</b><br>初期刀指定個体：1,284振り<br>比較対象個体：3,906振り<br>観測期間：顕現後3年以上<br>継続近侍：通算730日以上を基準として別途集計</div>
+        <p>初期刀指定個体では、存在の揺らぎが特定方向へ偏る傾向は確認されませんでした。一方、比較対象と比べ、標準域から離れた観測値を示す割合がやや高いことが確認されています。</p>
+        <p>以下は調査対象から、通常の初期刀指定例二振りと、特例として初期刀指定が承認された二振りを抜粋した記録です。</p>
+        <table class="data-table"><thead><tr><th>刀剣名</th><th>指定区分</th><th>観測個体</th><th>管理番号</th><th>登録先</th><th>初回観測</th><th>現観測</th><th>変動</th></tr></thead><tbody>
+          <tr><td>加州清光</td><td>通常指定</td><td class="code">K85-0412</td><td class="code">H-03N-0147682</td><td>加賀国</td><td class="num">52</td><td class="num">77</td><td class="num">＋25</td></tr>
+          <tr><td>山姥切国広</td><td>通常指定</td><td class="code">Y95-0836</td><td class="code">H-08C-0250831</td><td>備中国</td><td class="num">47</td><td class="num">21</td><td class="num">−26</td></tr>
+          <tr><td>一期一振</td><td>特例指定</td><td class="code">I25-1194</td><td class="code">H-06T-0093174</td><td>大和国</td><td class="num">50</td><td class="num">35</td><td class="num">−15</td></tr>
+          <tr><td>石切丸</td><td>特例指定</td><td class="code">I7-2047</td><td class="code">H-12F-0326459</td><td>肥後国</td><td class="num">49</td><td class="num">84</td><td class="num">＋35</td></tr>
+        </tbody></table>
+        <p class="small">※記載された観測値は各名称の代表値・平均値ではなく、調査対象となった個別事例です。<br>※特例指定は、本丸開設時の事情により通常の初期刀選定とは異なる指定が承認された事例を示します。</p>
+
+        <div class="case-list">
+          <div class="case">
+            <div class="case-head"><span class="case-name">加州清光</span><span class="case-code">観測個体 K85-0412 / H-03N-0147682 / 登録先：加賀国</span><span class="case-values">52 → 77</span></div>
+            <p>顕現後の長期観測では、審神者との日常的な意思疎通や本丸内での役割選択に、当該個体独自の判断が強く反映されるようになりました。初回観測時と比較して、本丸固有の習慣へ自発的に関与する例が増えています。</p>
+          </div>
+          <div class="case">
+            <div class="case-head"><span class="case-name">山姥切国広</span><span class="case-code">観測個体 Y95-0836 / H-08C-0250831 / 登録先：備中国</span><span class="case-values">47 → 21</span></div>
+            <p>長期接触後も、行動方針や自己認識における基礎的な傾向は大きく変化せず。審神者との関係は継続して形成されているものの、存在の揺らぎは低位で安定する方向へ推移しました。</p>
+          </div>
+          <div class="case">
+            <div class="case-head"><span class="case-name">一期一振</span><span class="case-code">観測個体 I25-1194 / H-06T-0093174 / 登録先：大和国 / 特例指定</span><span class="case-values">50 → 35</span></div>
+            <p><b>特例事由：</b>審神者適性および本丸運用計画。顕現初期から本丸内で担う役割が比較的明確であり、長期観測では周囲との関係を取り込みつつも、その在り方は一定方向へ定着する傾向が確認されました。</p>
+          </div>
+          <div class="case">
+            <div class="case-head"><span class="case-name">石切丸</span><span class="case-code">観測個体 I7-2047 / H-12F-0326459 / 登録先：肥後国 / 特例指定</span><span class="case-values">49 → 84</span></div>
+            <p><b>特例事由：</b>本丸開設時の霊的環境。開設初期から霊的環境の安定に関わる役割を担い、その後は日常的な本丸運用にも活動範囲が拡大。役割の増加と並行して、存在の揺らぎに大きな変化が確認されています。</p>
+          </div>
+        </div>
+
+        <p>同様の傾向は、長期間にわたり近侍を務める一部の個体からも確認されています。</p>
+        <p>ただし、接触期間そのものを存在の揺らぎの直接的な原因とする根拠は、現時点では確認されていません。審神者との関係性、共有した経験、本丸内での役割など、複数の要因が影響している可能性があります。</p>
+      </section>
+
+      <div class="record-row" onclick="toggleDoc('doc03')"><div class="doc-id">EVR-03</div><div class="doc-title">個体にみられる複数の側面と存在の揺らぎ</div><div class="status">公開</div></div>
+      <section class="doc" id="doc03">
+        <div class="doc-header"><div><b>資料番号</b> EVR-03</div><div><b>資料区分</b> 観測記録</div><div><b>記録部門</b> 刀剣管理部 調査課</div><div><b>公開区分</b> 審神者（一般）</div></div>
+        <h2>概要</h2>
+        <p>複数の存在側面が明確に確立されている刀剣男士について、存在の揺らぎとの関連を調査した記録です。</p>
+        <p>複数の側面を持つこと自体は、個体の存在が不安定であることを意味しません。それぞれの側面が明確に確立され、状態に応じた切り替えが安定している個体では、標準域またはそれを下回る存在の揺らぎが確認される場合があります。</p>
+        <table class="data-table"><thead><tr><th>観測対象</th><th>管理番号</th><th>登録先</th><th>確認側面</th><th>存在の揺らぎ</th></tr></thead><tbody>
+          <tr><td>鶴丸国永</td><td class="code">H-11R-0231947</td><td>山城国</td><td class="num">3</td><td class="num">34</td></tr>
+          <tr><td>大倶利伽羅</td><td class="code">H-05P-0302681</td><td>薩摩国</td><td class="num">2</td><td class="num">29</td></tr>
+          <tr><td>へし切長谷部</td><td class="code">H-07D-0117426</td><td>陸奥国</td><td class="num">3</td><td class="num">38</td></tr>
+        </tbody></table>
+        <p class="small">※「確認側面」は観測上明確に区別された状態の数を示すものであり、人格の分裂等を意味するものではありません。<br>※上記は各個体における直近観測時の記録です。</p>
+
+        <div class="case-list">
+          <div class="case">
+            <div class="case-head"><span class="case-name">鶴丸国永</span><span class="case-code">観測個体 T130-0118 / H-11R-0231947 / 登録先：山城国</span><span class="case-values">確認側面 3 / 存在の揺らぎ 34</span></div>
+            <p>日常時、出陣時、対外活動時で異なる行動傾向が確認されていますが、各側面はいずれも安定しており、切り替えに伴う存在の揺らぎに急激な変化は認められていません。</p>
+            <div class="quote">「どれも同じ一振りだろう？　いちいち分けて考えるほどのことでもないさ」<span class="src">同本丸所属・一文字則宗への聞き取り</span></div>
+          </div>
+          <div class="case">
+            <div class="case-head"><span class="case-name">大倶利伽羅</span><span class="case-code">観測個体 O116-0047 / H-05P-0302681 / 登録先：薩摩国</span><span class="case-values">確認側面 2 / 存在の揺らぎ 29</span></div>
+            <p>本丸内で単独行動を選択している場面と、出陣・共同任務など他個体との連携を必要とする場面で、周囲への応答傾向に明確な差が確認されています。一方、いずれの場合も自己認識や判断基準には大きな変化がなく、二つの側面は安定して併存しています。</p>
+            <div class="quote">「本人にとっては、どちらも特別なことではないと思います。こちらも違う状態として意識したことはありません」<span class="src">同本丸所属・審神者への聞き取り</span></div>
+          </div>
+          <div class="case">
+            <div class="case-head"><span class="case-name">へし切長谷部</span><span class="case-code">観測個体 H118-0039 / H-07D-0117426 / 登録先：陸奥国</span><span class="case-values">確認側面 3 / 存在の揺らぎ 38</span></div>
+            <p>主命への対応時、本丸内の日常業務時、他の刀剣男士と行動する場面で、言動や行動傾向にそれぞれ異なる特徴が確認されています。審神者への聞き取りでは、これらを別個の状態として認識していないとの回答が得られています。</p>
+            <div class="quote">「どれも長谷部ですよ。場面によって少し違うのは、ほかのみんなも同じでしょう」<span class="src">同本丸所属・審神者への聞き取り</span></div>
+          </div>
+        </div>
+
+        <p>これらの観測例から、現在の観測基準では、複数側面の確立そのものを存在の揺らぎの上昇要因とはみなしません。</p>
+        <p>一方、複数側面の明確な確立と、高い存在の揺らぎが同時に確認された事例も少数ながら記録されています。</p>
+        <div class="extract"><b>特異観測例・抜粋</b><br>観測記録番号：E-███-17<br>対象個体：<span class="redact">████████</span><br>管理番号：非公開<br>登録先：非公開<br>確認側面：3<br>存在の揺らぎ：<b>96 / 100</b><br>再観測：実施済<br>現在区分：継続観測</div>
+        <p>当該事例については、複数側面の存在と高い存在の揺らぎとの直接的な因果関係は確認されていません。同様の観測例については、現在も個別に記録・解析を継続しています。</p>
+      </section>
+
+      <div class="record-row locked" onclick="toggleDenied('denied04')"><div class="doc-id">EVR-04</div><div class="doc-title">存在の揺らぎ関連事例における再発防止措置の検証</div><div class="status lock">閲覧制限</div></div>
+      <section class="denied" id="denied04">
+        <div class="denied-line"><strong>閲覧要求：拒否</strong></div>
+        <div class="denied-line">資料番号：EVR-04</div>
+        <div class="denied-line">理由：現在の閲覧権限では本文および付属記録を表示できません。</div>
+        <div class="denied-note">資料名および公開区分のみ閲覧できます。</div>
+      </section>
+    </div>
+    <div class="unofficial">このページは『刀剣乱舞ONLINE』を題材とした非公式のファンメイド資料です。記載される研究記録・観測値・個体事例・本丸管理番号はすべて本コンテンツ独自の創作設定であり、『刀剣乱舞ONLINE』の公式設定・運営・関係各社とは一切関係ありません。</div>
+  </main>
+  <div class="footer">RESEARCH ARCHIVE / ver.1.0</div>
+</div>
+<script>
+function toggleDoc(id){document.getElementById(id).classList.toggle('open');}
+function toggleDenied(id){document.getElementById(id).classList.toggle('open');}
+</script>
+</body>
+</html>
